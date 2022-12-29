@@ -1,4 +1,4 @@
-package com.homeshoping.homeshoping.entity.member;
+package com.homeshoping.homeshoping.entity.user;
 
 import javax.persistence.Embeddable;
 

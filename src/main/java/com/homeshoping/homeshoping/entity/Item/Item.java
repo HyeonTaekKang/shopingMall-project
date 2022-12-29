@@ -33,6 +33,7 @@ public class Item {
     @Column(nullable = false)
     private String stockQuantity;  // 상품 재고
 
+
     private LocalDateTime date; // 상품 등록 날짜
 
     @Column(nullable = false)
