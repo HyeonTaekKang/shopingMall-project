@@ -15,7 +15,7 @@ public class Album  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ALBUM_ID")
+    @Column(name = "album_id")
     private Long id;
 
     @OneToOne(mappedBy = "album",fetch = FetchType.LAZY)

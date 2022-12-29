@@ -16,7 +16,7 @@ public class Food {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "FOOD_ID")
+    @Column(name = "food_id")
     private Long id;
 
     @OneToOne(mappedBy = "food",fetch = FetchType.LAZY)
