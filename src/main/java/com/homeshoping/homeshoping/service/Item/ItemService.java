@@ -5,7 +5,7 @@ import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
-import com.homeshoping.homeshoping.response.Item.ItemEdit;
+import com.homeshoping.homeshoping.request.Item.ItemEdit;
 import com.homeshoping.homeshoping.response.Item.ItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
