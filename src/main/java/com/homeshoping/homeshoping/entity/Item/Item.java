@@ -1,18 +1,15 @@
 package com.homeshoping.homeshoping.entity.Item;
 
+import com.homeshoping.homeshoping.entity.orderItem.OrderItem;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
-import com.homeshoping.homeshoping.response.Item.ItemEdit;
+import com.homeshoping.homeshoping.request.Item.ItemEdit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -21,7 +18,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ITEM_ID")
+    @Column(name = "item_id")
     private Long id;
 
     @Column(nullable = false, length = 50)
@@ -40,13 +37,14 @@ public class Item {
     private String itemType; // 상품 타입
 
     @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    @JoinColumn(name="ALBUM_ID")
+    @JoinColumn(name="album_id")
     private Album album;
 
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="FOOD_ID")
+    @JoinColumn(name="food_id")
     private Food food;
+
 
     @Builder
     public Item(Long id, String name, String price, String stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
@@ -60,7 +58,7 @@ public class Item {
         this.food = food;
     }
 
-    // 생성자 오버로드 ( item 추가 )
+    // 생성자 오버로딩 ( item 추가 )
     public Item(ItemCreate itemCreate) {
         this.name = itemCreate.getName();
         this.price = itemCreate.getPrice();
@@ -71,7 +69,7 @@ public class Item {
         this.food = itemCreate.getFood();
     }
 
-    // 생성자 오버로드 ( item 변경 )
+    // 생성자 오버로딩 ( item 변경 )
     public Item(ItemEdit itemEdit){
         this.name = itemEdit.getName();
         this.price = itemEdit.getPrice();
@@ -81,6 +79,8 @@ public class Item {
         this.album = itemEdit.getAlbum();
         this.food = itemEdit.getFood();
     }
+
+
 
 
     // 상품 추가 메서드
