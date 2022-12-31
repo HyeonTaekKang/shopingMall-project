@@ -3,7 +3,7 @@ package com.homeshoping.homeshoping.controller.Item;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homeshoping.homeshoping.entity.Item.Album;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
-import com.homeshoping.homeshoping.response.Item.ItemEdit;
+import com.homeshoping.homeshoping.request.Item.ItemEdit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

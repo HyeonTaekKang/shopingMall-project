@@ -1,4 +1,4 @@
-package com.homeshoping.homeshoping.response.Item;
+package com.homeshoping.homeshoping.request.Item;
 
 import com.homeshoping.homeshoping.entity.Item.Album;
 import com.homeshoping.homeshoping.entity.Item.Food;

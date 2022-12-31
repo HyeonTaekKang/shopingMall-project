@@ -7,21 +7,18 @@ import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
-import com.homeshoping.homeshoping.response.Item.ItemEdit;
+import com.homeshoping.homeshoping.request.Item.ItemEdit;
 import com.homeshoping.homeshoping.response.Item.ItemResponse;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

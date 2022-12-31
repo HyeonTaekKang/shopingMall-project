@@ -1,4 +1,4 @@
-package com.homeshoping.homeshoping.controller.user;
+package com.homeshoping.homeshoping.controller.member;
 
 import com.homeshoping.homeshoping.request.member.Login;
 import com.homeshoping.homeshoping.service.member.AuthService;
