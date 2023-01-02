@@ -1,12 +1,14 @@
 package com.homeshoping.homeshoping.entity.member;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
 @NoArgsConstructor
+@Getter
 public class Address {
 
     private String city;
