@@ -27,20 +27,38 @@ public class OrderItem {
     @JoinColumn(name = "item_id")
     private Item item;
 
-    private int orderPrice; // 주문 가격 ( 주문 당시의 상품 가격 )
+    private String orderPrice; // 주문 가격 ( 주문 당시의 상품 가격 )
 
     private int orderCount; // 주문 수량 ( 몇 개를 주문했는지 )
 
     @Builder
-    public OrderItem(Order order, Item item, int orderPrice, int orderCount) {
+    public OrderItem(Order order, Item item, String orderPrice, int orderCount) {
         this.order = order;
         this.item = item;
         this.orderPrice = orderPrice;
         this.orderCount = orderCount;
     }
 
-    // 연관관계 편의메서드
+    // 생성메서드
+    public static OrderItem createOrderItem(Item item , String orderPrice , int orderCount){
+        OrderItem orderItem = new OrderItem();
+
+        // 연관관계 셋팅 ( orderItem - item  )
+        orderItem.setItem(item);
+
+        orderItem.orderPrice = orderPrice;
+        orderItem.orderCount = orderCount;
+
+        return orderItem;
+    }
+
+    // 연관관계 편의메서드 ( orderItem - item )
     public void setItem(Item item){
         this.item = item;
+    }
+
+    // 연관관계 편의메서드 ( orderItem - order )
+    public void setOrder(Order order){
+        this.order = order;
     }
 }
