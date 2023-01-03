@@ -63,9 +63,12 @@ public class Order {
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
-        return order;
 
+        order.orderDate = LocalDateTime.now();
+
+        return order;
     }
+
 
     // 연관관계 편의메서드 ( member 셋팅 )
     public void setMember(Member member){
