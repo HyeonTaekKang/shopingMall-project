@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -29,7 +30,7 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;  // 누가 주문했는지
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order" , cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>(); // 주문한 아이템들은 뭔지
 
     private LocalDateTime orderDate; // 언제 주문했는지
@@ -40,6 +41,9 @@ public class Order {
         this.member = member;
         this.orderItems = orderItems;
         this.orderDate = orderDate;
+
+        // 연관관계 맵핑 ( order - orderItem )
+        OrderItem.builder().order(this);
     }
 
     //생성자 오버로딩 ( Order 추가 (OrderCreate -> Order) )
@@ -51,12 +55,16 @@ public class Order {
 //    }
 
     // Order 생성 메서드
-    public static Order createOrder(Member member){
+    public static Order createOrder(Member member , OrderItem ...orderItems){
 
         Order order = new Order();
         order.setMember(member);
 
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
         return order;
+
     }
 
     // 연관관계 편의메서드 ( member 셋팅 )
@@ -64,14 +72,11 @@ public class Order {
         this.member = member;
     }
 
-    // 연관관계 편의메서드 ( orderItems 셋팅 )
-    public void addOrderItems(OrderItem orderItem){
-        orderItems.add(orderItem);
-//        orderItem.setOrder(this);
 
-        OrderItem.builder()
-                .order(this)
-                .build();
+    // 연관관계 편의메서드 ( orderItem 셋팅 )
+    public void addOrderItem(OrderItem orderItem){
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
     }
 
 
