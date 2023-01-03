@@ -59,7 +59,7 @@ class OrderServiceTest {
     void clean() {
         memberRepository.deleteAll();
         orderRepository.deleteAll();
-
+        itemRepository.deleteAll();
     }
 
     @Test
@@ -72,16 +72,23 @@ class OrderServiceTest {
         MemberCreate newMember = createNewMember();
 
         // 생성한 member 찾아오기
-        Member member = memberRepository.findById(1L).orElseThrow(MemberNotFound::new);
+//        Member member = memberRepository.findById(1L).orElseThrow(MemberNotFound::new);
 
         // item 생성
         ItemCreate newItem = createNewItem();
 
         // 생성한 Item 찾아오기
-        Item item = itemRepository.findById(1L).orElseThrow(ItemNotFound::new);
+//        Item item = itemRepository.findById(1L).orElseThrow(ItemNotFound::new);
+
+        // orderCreate
+        OrderCreate orderCreate = OrderCreate.builder()
+                .memberId(1L)
+                .itemId(1L)
+                .orderCount(10)
+                .build();
 
         // order 생성
-        orderService.create(member.getId(),item.getId(),10);
+        orderService.create(orderCreate);
 
         // then
 
