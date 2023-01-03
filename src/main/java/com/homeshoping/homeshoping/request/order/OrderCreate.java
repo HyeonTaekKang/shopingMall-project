@@ -6,30 +6,26 @@ import com.homeshoping.homeshoping.request.member.MemberCreate;
 import com.homeshoping.homeshoping.request.orderItem.OrderItemCreate;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class OrderCreate {
 
-    private Long orderId; // order ID
+    private Long memberId; // 회원 id
 
-    private MemberCreate memberCreate; // 주문한 회원정보
+    private Long itemId; // 아이템 id
 
-    private List<OrderItemCreate> orderItems = new ArrayList<>(); // 주문한 아이템들
-
-    private LocalDateTime orderDate; // 주문한 날짜
-
-    private AddressCreate addressCreate; // 주문한 회원의 주소
+    private int orderCount; // 주문 수량
 
     @Builder
-    public OrderCreate(Long orderId, MemberCreate memberCreate, List<OrderItemCreate> orderItems, LocalDateTime orderDate, AddressCreate addressCreate) {
-        this.orderId = orderId;
-        this.memberCreate = memberCreate;
-        this.orderItems = orderItems;
-        this.orderDate = orderDate;
-        this.addressCreate = addressCreate;
+    public OrderCreate(Long memberId, Long itemId, int orderCount) {
+        this.memberId = memberId;
+        this.itemId = itemId;
+        this.orderCount = orderCount;
     }
 }
