@@ -16,7 +16,7 @@ public class OrderCreate {
 
     private Long orderId; // order ID
 
-    private MemberCreate memberCreate; // 주문한 회원 정보
+    private MemberCreate memberCreate; // 주문한 회원정보
 
     private List<OrderItemCreate> orderItems = new ArrayList<>(); // 주문한 아이템들
 

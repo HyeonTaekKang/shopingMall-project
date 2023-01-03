@@ -1,6 +1,7 @@
 package com.homeshoping.homeshoping.request.member;
 
 import com.homeshoping.homeshoping.entity.member.Address;
+import com.homeshoping.homeshoping.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,4 +28,6 @@ public class MemberCreate {
         this.password = password;
         this.addressCreate = addressCreate;
     }
+
+
 }
