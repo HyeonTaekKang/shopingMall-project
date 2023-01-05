@@ -16,8 +16,8 @@ public class ItemResponse {
 
     private final Long id; // 상품 id
     private final String name;     // 이름
-    private final String price;       // 가격
-    private final String stockQuantity;  // 재고
+    private final int price;       // 가격
+    private final int stockQuantity;  // 재고
     private final LocalDateTime date; // 상품 등록 날짜
     private final String itemType; // 상품 타입
 
@@ -28,7 +28,7 @@ public class ItemResponse {
     private Food food;
 
     @Builder
-    public ItemResponse(Long id, String name, String price, String stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
+    public ItemResponse(Long id, String name, int price, int stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -39,7 +39,7 @@ public class ItemResponse {
         this.food = food;
     }
 
-    // 생성자 오버로드 ( 엔티티 -> DTO )
+    // 생성자 오버로딩 ( 엔티티 -> DTO )
     public ItemResponse(Item i) {
         this.id = i.getId();
         this.name = i.getName();

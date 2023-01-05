@@ -52,8 +52,8 @@ class ItemControllerTest {
 
         Item item = Item.builder()
                 .name("savage")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
@@ -76,8 +76,8 @@ class ItemControllerTest {
 
         ItemCreate newProduct = ItemCreate.builder()
                 .name("savage")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
@@ -110,8 +110,8 @@ class ItemControllerTest {
 
             ItemCreate newProduct = ItemCreate.builder()
                     .name("savage" + i)
-                    .price("10000")
-                    .stockQuantity("1000")
+                    .price(10000)
+                    .stockQuantity(10000)
                     .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
@@ -131,8 +131,8 @@ class ItemControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("savage300"))
-                .andExpect(jsonPath("$[0].price").value("10000"))
-                .andExpect(jsonPath("$[0].stockQuantity").value("1000"))
+                .andExpect(jsonPath("$[0].price").value(10000))
+                .andExpect(jsonPath("$[0].stockQuantity").value(10000))
                 .andExpect(jsonPath("$[0].itemType").value("Album"))
                 .andDo(print());
     }
@@ -152,8 +152,8 @@ class ItemControllerTest {
 
         ItemEdit itemEdit = ItemEdit.builder()
                 .name("hypeboy")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(editedAlbum)
@@ -178,20 +178,7 @@ class ItemControllerTest {
 
         // given
         // 제품 한개 등록 ( 앨범 )
-        Album album = Album.builder()
-                .artist("에스파")
-                .build();
-
-        Item item = Item.builder()
-                .name("savage")
-                .price("10000")
-                .stockQuantity("1000")
-                .date(LocalDateTime.now())
-                .itemType("Album")
-                .album(album)
-                .build();
-
-        itemRepository.save(item);
+        Item item = saveItemWithAlbum();
 
         // expected
         // 제품 삭제
@@ -201,6 +188,12 @@ class ItemControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+
+
+
+
+
 
 
 

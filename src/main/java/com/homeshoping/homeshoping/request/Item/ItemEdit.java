@@ -21,10 +21,10 @@ public class ItemEdit {
     private String name;     // 이름
 
     @Column(nullable = false)
-    private String price;       // 가격
+    private int price;       // 가격
 
     @Column(nullable = false)
-    private String stockQuantity;  // 재고
+    private int stockQuantity;  // 재고
 
     private LocalDateTime date; // 상품 등록 날짜
 
@@ -38,7 +38,7 @@ public class ItemEdit {
     private Food food;
 
     @Builder
-    public ItemEdit(Long id, String name, String price, String stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
+    public ItemEdit(Long id, String name, int price, int stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
         this.id = id;
         this.name = name;
         this.price = price;

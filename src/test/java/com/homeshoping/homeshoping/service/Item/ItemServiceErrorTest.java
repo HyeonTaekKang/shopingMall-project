@@ -50,8 +50,8 @@ public class ItemServiceErrorTest {
 
         ItemCreate newProduct = ItemCreate.builder()
                 .name("김치말이국수")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Food")
                 .food(food)
@@ -95,8 +95,8 @@ public class ItemServiceErrorTest {
 
             ItemCreate newProduct = ItemCreate.builder()
                     .name("savage" + i)
-                    .price("10000")
-                    .stockQuantity("1000")
+                    .price(10000)
+                    .stockQuantity(10000)
                     .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
@@ -133,8 +133,8 @@ public class ItemServiceErrorTest {
 
             ItemCreate newProduct = ItemCreate.builder()
                     .name("savage" + i)
-                    .price("10000")
-                    .stockQuantity("1000")
+                    .price(10000)
+                    .stockQuantity(10000)
                     .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)

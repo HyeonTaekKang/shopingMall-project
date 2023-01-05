@@ -25,10 +25,10 @@ public class ItemCreate {
     private String name;     // 상품명
 
     @NotBlank(message = "상품의 가격을 입력해주세요!")
-    private String price;       // 상품가격
+    private int price;       // 상품가격
 
     @NotBlank(message = "상품의 재고를 입력해주세요!")
-    private String stockQuantity;   // 상품재고
+    private int stockQuantity;   // 상품재고
 
     private LocalDateTime date; // 상품 등록 날짜
 
@@ -42,7 +42,7 @@ public class ItemCreate {
     private Food food;
 
     @Builder
-    public ItemCreate(Long id, String name, String price, String stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
+    public ItemCreate(Long id, String name, int price, int stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
         this.id = id;
         this.name = name;
         this.price = price;

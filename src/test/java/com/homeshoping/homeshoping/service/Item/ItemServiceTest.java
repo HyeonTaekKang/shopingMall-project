@@ -54,8 +54,8 @@ class ItemServiceTest {
 
         ItemCreate itemCreate = ItemCreate.builder()
                 .name("savage")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
@@ -68,8 +68,8 @@ class ItemServiceTest {
         // then
         // 상품 검증
         assertEquals("savage",itemCreate.getName());
-        assertEquals("10000",itemCreate.getPrice());
-        assertEquals("1000",itemCreate.getStockQuantity());
+        assertEquals(10000,itemCreate.getPrice());
+        assertEquals(10000,itemCreate.getStockQuantity());
         assertEquals("Album",itemCreate.getItemType());
         assertEquals("에스파",itemCreate.getAlbum().getArtist());
     }
@@ -88,8 +88,8 @@ class ItemServiceTest {
 
         ItemCreate itemCreate = ItemCreate.builder()
                 .name("김치말이국수")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Food")
                 .food(food)
@@ -100,8 +100,8 @@ class ItemServiceTest {
         // then
         // 상품 검증
         assertEquals("김치말이국수",itemCreate.getName());
-        assertEquals("10000",itemCreate.getPrice());
-        assertEquals("1000",itemCreate.getStockQuantity());
+        assertEquals(10000,itemCreate.getPrice());
+        assertEquals(10000,itemCreate.getStockQuantity());
         assertEquals("Food",itemCreate.getItemType());
         assertEquals("한국",itemCreate.getFood().getMadeIn());
         assertEquals("(주)하림",itemCreate.getFood().getManufacturer());
@@ -120,8 +120,8 @@ class ItemServiceTest {
 
         ItemCreate itemCreate = ItemCreate.builder()
                 .name("savage")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
@@ -136,8 +136,8 @@ class ItemServiceTest {
         // then
         // 가져온 제품 검증
         assertEquals("savage",foundedItem.getName());
-        assertEquals("10000",foundedItem.getPrice());
-        assertEquals("1000",foundedItem.getStockQuantity());
+        assertEquals(10000,foundedItem.getPrice());
+        assertEquals(10000,foundedItem.getStockQuantity());
         assertEquals("Album",foundedItem.getItemType());
     }
 
@@ -155,8 +155,8 @@ class ItemServiceTest {
 
             ItemCreate itemCreate = ItemCreate.builder()
                     .name("savage" + i)
-                    .price("10000")
-                    .stockQuantity("1000")
+                    .price(10000)
+                    .stockQuantity(10000)
                     .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
@@ -191,8 +191,8 @@ class ItemServiceTest {
 
             ItemCreate itemCreate = ItemCreate.builder()
                     .name("savage" + i)
-                    .price("10000")
-                    .stockQuantity("1000")
+                    .price(10000)
+                    .stockQuantity(10000)
                     .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
@@ -229,8 +229,8 @@ class ItemServiceTest {
 
         Item item = Item.builder()
                 .name("savage")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
@@ -245,8 +245,8 @@ class ItemServiceTest {
 
         ItemEdit itemEdit = ItemEdit.builder()
                 .name("hypeboy")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(editedAlbum)
@@ -276,8 +276,8 @@ class ItemServiceTest {
 
         Item item = Item.builder()
                 .name("savage")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
@@ -291,5 +291,25 @@ class ItemServiceTest {
 
         // then
         assertEquals(0,itemRepository.count());
+    }
+
+    // 새로운 아이템( 앨범 ) 생성 메서드
+    private ItemCreate createNewItem(){
+        // 제품 한개 등록 ( 앨범 )
+        Album album = Album.builder()
+                .artist("에스파")
+                .build();
+
+        ItemCreate itemCreate = ItemCreate.builder()
+                .name("savage")
+                .price(10000)
+                .stockQuantity(10000)
+                .date(LocalDateTime.now())
+                .itemType("Album")
+                .album(album)
+                .build();
+
+        itemService.itemRegistration(itemCreate);
+        return itemCreate;
     }
 }

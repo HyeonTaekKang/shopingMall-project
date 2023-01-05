@@ -25,11 +25,10 @@ public class Item {
     private String name;     // 상품 이름
 
     @Column(nullable = false)
-    private String price;       // 상품 가격
+    private int price;       // 상품 가격
 
     @Column(nullable = false)
-    private String stockQuantity;  // 상품 재고
-
+    private int stockQuantity;  // 상품 재고
 
     private LocalDateTime date; // 상품 등록 날짜
 
@@ -40,14 +39,13 @@ public class Item {
     @JoinColumn(name="album_id")
     private Album album;
 
-
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="food_id")
     private Food food;
 
 
     @Builder
-    public Item(Long id, String name, String price, String stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
+    public Item(Long id, String name, int price, int stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -80,7 +78,11 @@ public class Item {
         this.food = itemEdit.getFood();
     }
 
-
+    // === 비지니스 메서드 ===
+    // 재고량을 줄이는 메서드
+    public void removeStockQuantity(int orderCount){
+        this.stockQuantity = stockQuantity - orderCount;
+    }
 
 
     // 상품 추가 메서드

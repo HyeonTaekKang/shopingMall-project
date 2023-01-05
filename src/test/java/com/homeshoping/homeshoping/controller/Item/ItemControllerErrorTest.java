@@ -41,8 +41,8 @@ public class ItemControllerErrorTest {
                 .build();
 
         ItemCreate newProduct = ItemCreate.builder()
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
@@ -86,8 +86,8 @@ public class ItemControllerErrorTest {
 
         ItemEdit itemEdit = ItemEdit.builder()
                 .name("hypeboy")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(editedAlbum)
