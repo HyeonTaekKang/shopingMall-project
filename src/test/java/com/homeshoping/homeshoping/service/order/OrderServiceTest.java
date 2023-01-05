@@ -14,8 +14,10 @@ import com.homeshoping.homeshoping.request.member.AddressCreate;
 import com.homeshoping.homeshoping.request.member.MemberCreate;
 import com.homeshoping.homeshoping.request.order.OrderCreate;
 import com.homeshoping.homeshoping.response.member.MemberResponse;
+import com.homeshoping.homeshoping.response.order.OrderResponse;
 import com.homeshoping.homeshoping.service.Item.ItemService;
 import com.homeshoping.homeshoping.service.member.MemberService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,6 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
 class OrderServiceTest {
 
     @Autowired
@@ -74,7 +75,7 @@ class OrderServiceTest {
         // 생성한 member 찾아오기
 //        Member member = memberRepository.findById(1L).orElseThrow(MemberNotFound::new);
 
-        // item 생성
+        // item 생성 ( 앨범 )
         ItemCreate newItem = createNewItem();
 
         // 생성한 Item 찾아오기
@@ -93,6 +94,44 @@ class OrderServiceTest {
         // then
 
     }
+
+    @Test
+    @DisplayName("회원이 주문한 '주문 정보 가져오기 테스트' ")
+    @Rollback(value = false)
+    @Transactional
+    void getOrderTest(){
+
+        // 새로운 member 생성
+        MemberCreate newMember = createNewMember();
+
+        // 새로운 item 생성 ( 앨범 )
+        ItemCreate newItem = createNewItem();
+
+        // 새로운 order 셋팅
+        OrderCreate newOrder = createNewOrder();
+
+        // 새로운 order 생성
+        orderService.create(newOrder);
+
+        // order 정보 가져오기
+        OrderResponse orderResponse = orderService.getOrder(1L);
+
+        assertEquals(1L,orderResponse.getOrderItemId());
+        assertEquals("savage",orderResponse.getOrderItemName());
+        assertEquals(10000,orderResponse.getOrderPrice());
+        assertEquals(10000,orderResponse.getOrderItemStockQuantity());
+
+    }
+
+
+
+
+
+
+
+
+
+
 
     // 새로운 회원생성 메서드
     private MemberCreate createNewMember(){
@@ -113,7 +152,7 @@ class OrderServiceTest {
         return memberCreate;
     }
 
-    // 새로운 아이템 생성 메서드
+    // 새로운 아이템( 앨범 ) 생성 메서드
     private ItemCreate createNewItem(){
         // 제품 한개 등록 ( 앨범 )
         Album album = Album.builder()
@@ -122,8 +161,8 @@ class OrderServiceTest {
 
         ItemCreate itemCreate = ItemCreate.builder()
                 .name("savage")
-                .price("10000")
-                .stockQuantity("1000")
+                .price(10000)
+                .stockQuantity(10000)
                 .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
@@ -131,6 +170,18 @@ class OrderServiceTest {
 
         itemService.itemRegistration(itemCreate);
         return itemCreate;
+    }
+
+    // 새로운 주문 생성 메서드
+    private OrderCreate createNewOrder(){
+
+        OrderCreate orderCreate = OrderCreate.builder()
+                .memberId(1L)
+                .itemId(1L)
+                .orderCount(10)
+                .build();
+
+        return orderCreate;
     }
 
 
