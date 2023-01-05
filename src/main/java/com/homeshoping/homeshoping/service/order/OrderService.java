@@ -44,5 +44,23 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    public OrderResponse getOrder(Long memberId){
+
+        // 주문한 회원의 "주문 정보" 가져오기
+        OrderItem orderItem = orderRepository.getOrder(memberId);
+
+        // orderItem 객체에 있는 정보를 "OrderResponse DTO에 옮기기"
+        OrderResponse orderResponse = OrderResponse.builder()
+                .orderItemId(orderItem.getId())
+                .orderItemName(orderItem.getItem().getName())
+                .orderPrice(orderItem.getOrderPrice())
+                .orderDate(orderItem.getOrder().getOrderDate())
+                .orderItemStockQuantity(orderItem.getItem().getStockQuantity())
+                .build();
+
+        return orderResponse;
+    }
+
+
 
 }
