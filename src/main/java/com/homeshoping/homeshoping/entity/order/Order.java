@@ -35,7 +35,7 @@ public class Order {
 
     private LocalDateTime orderDate; // 언제 주문했는지
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus; // 주문 상태 ( ORDER ,CANCEL )
 
 //    @Builder
@@ -61,13 +61,19 @@ public class Order {
     public static Order createOrder(Member member , OrderItem ...orderItems){
 
         Order order = new Order();
+
+        // order엔티티에 매개변수로 받아온 member를 'setMember'라는 연관관계 편의메세드로 연관관계를 맺어줌.
         order.setMember(member);
 
+        // orderItem 리스트에 주문한 아이템들 add
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
 
+        // 주문날짜 = order 생성시간 ( 지금)
         order.orderDate = LocalDateTime.now();
+
+        // 주문상태 = ORDER
         order.orderStatus = OrderStatus.ORDER;
 
         return order;
