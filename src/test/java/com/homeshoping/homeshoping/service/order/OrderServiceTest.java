@@ -6,6 +6,7 @@ import com.homeshoping.homeshoping.entity.Item.Album;
 import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.entity.member.Address;
 import com.homeshoping.homeshoping.entity.member.Member;
+import com.homeshoping.homeshoping.entity.order.OrderStatus;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.repository.member.MemberRepository;
 import com.homeshoping.homeshoping.repository.order.OrderRepository;
@@ -110,17 +111,18 @@ class OrderServiceTest {
         // 새로운 order 셋팅
         OrderCreate newOrder = createNewOrder();
 
-        // 새로운 order 생성
+        // 새로운 order 생성 ( 앨범 10개 주문 )
         orderService.create(newOrder);
 
         // order 정보 가져오기
         OrderResponse orderResponse = orderService.getOrder(1L);
 
-        assertEquals(1L,orderResponse.getOrderItemId());
-        assertEquals("savage",orderResponse.getOrderItemName());
-        assertEquals(10000,orderResponse.getOrderPrice());
-        assertEquals(10000,orderResponse.getOrderItemStockQuantity());
-
+        assertEquals(1L,orderResponse.getOrderItemId()); // 주문한 아이템의 id
+        assertEquals("savage",orderResponse.getOrderItemName()); // 주문한 아이템의 이름
+        assertEquals(10000,orderResponse.getOrderPrice()); // 주문한 아이템의 가격
+        assertEquals(10,orderResponse.getOrderCount()); // 주문한 아이템 수량
+        assertEquals(9990,orderResponse.getOrderItemStockQuantity()); // 주문후 남은 아이템의 수량 (10000 - 10 = 9990)
+        assertEquals(OrderStatus.ORDER, orderResponse.getOrderStatus()); // 주문후 주문의 상태 ( ORDER )
     }
 
 
