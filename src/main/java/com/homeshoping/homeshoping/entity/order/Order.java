@@ -1,5 +1,6 @@
 package com.homeshoping.homeshoping.entity.order;
 
+import com.homeshoping.homeshoping.entity.delivery.Delivery;
 import com.homeshoping.homeshoping.entity.orderItem.OrderItem;
 import com.homeshoping.homeshoping.entity.member.Member;
 import com.homeshoping.homeshoping.request.member.MemberCreate;
@@ -38,6 +39,9 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus; // 주문 상태 ( ORDER ,CANCEL )
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
 //    @Builder
 //    public Order(Long id, Member member, List<OrderItem> orderItems, LocalDateTime orderDate) {
 //        this.id = id;
