@@ -54,8 +54,10 @@ public class OrderService {
                 .orderItemId(orderItem.getId())
                 .orderItemName(orderItem.getItem().getName())
                 .orderPrice(orderItem.getOrderPrice())
+                .orderCount(orderItem.getOrderCount())
                 .orderDate(orderItem.getOrder().getOrderDate())
                 .orderItemStockQuantity(orderItem.getItem().getStockQuantity())
+                .orderStatus(orderItem.getOrder().getOrderStatus())
                 .build();
 
         return orderResponse;
