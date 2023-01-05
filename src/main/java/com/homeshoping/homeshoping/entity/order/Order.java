@@ -35,16 +35,19 @@ public class Order {
 
     private LocalDateTime orderDate; // 언제 주문했는지
 
-    @Builder
-    public Order(Long id, Member member, List<OrderItem> orderItems, LocalDateTime orderDate) {
-        this.id = id;
-        this.member = member;
-        this.orderItems = orderItems;
-        this.orderDate = orderDate;
+    @Enumerated
+    private OrderStatus orderStatus; // 주문 상태 ( ORDER ,CANCEL )
 
-        // 연관관계 맵핑 ( order - orderItem )
-        OrderItem.builder().order(this);
-    }
+//    @Builder
+//    public Order(Long id, Member member, List<OrderItem> orderItems, LocalDateTime orderDate) {
+//        this.id = id;
+//        this.member = member;
+//        this.orderItems = orderItems;
+//        this.orderDate = orderDate;
+//
+//        // 연관관계 맵핑 ( order - orderItem )
+//        OrderItem.builder().order(this);
+//    }
 
     //생성자 오버로딩 ( Order 추가 (OrderCreate -> Order) )
 //    @Builder
@@ -65,6 +68,7 @@ public class Order {
         }
 
         order.orderDate = LocalDateTime.now();
+        order.orderStatus = OrderStatus.ORDER;
 
         return order;
     }
