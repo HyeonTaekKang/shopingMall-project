@@ -1,12 +1,15 @@
 package com.homeshoping.homeshoping.service.order;
 
+import com.homeshoping.homeshoping.Exception.DeliveryNotFound;
 import com.homeshoping.homeshoping.Exception.ItemNotFound;
 import com.homeshoping.homeshoping.Exception.MemberNotFound;
 import com.homeshoping.homeshoping.entity.Item.Item;
+import com.homeshoping.homeshoping.entity.delivery.Delivery;
 import com.homeshoping.homeshoping.entity.member.Member;
 import com.homeshoping.homeshoping.entity.order.Order;
 import com.homeshoping.homeshoping.entity.orderItem.OrderItem;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
+import com.homeshoping.homeshoping.repository.delivery.DeliveryRepository;
 import com.homeshoping.homeshoping.repository.member.MemberRepository;
 import com.homeshoping.homeshoping.repository.order.OrderRepository;
 import com.homeshoping.homeshoping.request.member.MemberCreate;
@@ -24,6 +27,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
+    private final DeliveryRepository deliveryRepository;
 
     @Transactional      // memberId    // itemId    // 주문 수량
     public void create(OrderCreate orderCreate){
@@ -34,11 +38,14 @@ public class OrderService {
         // 회원이 주문한 아이템 찾아오기 ( item )
         Item item = itemRepository.findById(orderCreate.getItemId()).orElseThrow(ItemNotFound::new);
 
+        // 회원이 주문한 배달 정보 찾아오기 ( delivery )
+        Delivery delivery = deliveryRepository.findById(orderCreate.getDeliveryId()).orElseThrow(DeliveryNotFound::new);
+
         // 회원이 주문한 아이템으로 주문아이템 생성 ( orderItem )
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), orderCreate.getOrderCount());
 
-        // 주문 생성 ( member + orderItem )
-        Order order = Order.createOrder(member , orderItem);
+        // 주문 생성 ( member + orderItem , delivery )
+        Order order = Order.createOrder(member , delivery, orderItem );
 
         // 생성한 order 저장
         orderRepository.save(order);
