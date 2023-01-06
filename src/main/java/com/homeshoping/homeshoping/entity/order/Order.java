@@ -39,30 +39,13 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus; // 주문 상태 ( ORDER ,CANCEL )
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
-//    @Builder
-//    public Order(Long id, Member member, List<OrderItem> orderItems, LocalDateTime orderDate) {
-//        this.id = id;
-//        this.member = member;
-//        this.orderItems = orderItems;
-//        this.orderDate = orderDate;
-//
-//        // 연관관계 맵핑 ( order - orderItem )
-//        OrderItem.builder().order(this);
-//    }
 
-    //생성자 오버로딩 ( Order 추가 (OrderCreate -> Order) )
-//    @Builder
-//    public Order(OrderCreate orderCreate) {
-//        // 주문한 회원의 정보중 이름만 전달
-//        member = orderCreate.getMemberCreate()
-//
-//    }
 
     // Order 생성 메서드
-    public static Order createOrder(Member member , OrderItem ...orderItems){
+    public static Order createOrder(Member member , Delivery delivery , OrderItem ...orderItems){
 
         Order order = new Order();
 
@@ -80,6 +63,9 @@ public class Order {
         // 주문상태 = ORDER
         order.orderStatus = OrderStatus.ORDER;
 
+        // order엔티티에 매개변수로 받아온 delivery를 'setDelivery'라는 연관관계 편의메세드로 연관관계를 맺어줌.
+        order.setDelivery(delivery);
+
         return order;
     }
 
@@ -89,11 +75,16 @@ public class Order {
         this.member = member;
     }
 
-
     // 연관관계 편의메서드 ( orderItem 셋팅 )
     public void addOrderItem(OrderItem orderItem){
         orderItems.add(orderItem);
         orderItem.setOrder(this);
+    }
+
+    // 연관관계 편의메서드 ( delivery 셋팅 )
+    public void setDelivery(Delivery delivery){
+        this.delivery = delivery;
+        delivery.setOrder(this);
     }
 
 
