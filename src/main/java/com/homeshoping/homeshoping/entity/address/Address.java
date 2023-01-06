@@ -1,4 +1,4 @@
-package com.homeshoping.homeshoping.entity.member;
+package com.homeshoping.homeshoping.entity.address;
 
 import lombok.Builder;
 import lombok.Getter;
