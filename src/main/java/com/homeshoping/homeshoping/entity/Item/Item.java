@@ -79,7 +79,7 @@ public class Item {
     }
 
     // === 비지니스 메서드 ===
-    // 재고량을 줄이는 메서드
+    // 주문량 만큼 재고수량을 줄이는 메서드
     public void removeStockQuantity(int orderCount){
         this.stockQuantity = stockQuantity - orderCount;
     }
