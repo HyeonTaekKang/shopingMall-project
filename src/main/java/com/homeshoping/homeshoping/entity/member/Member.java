@@ -1,5 +1,6 @@
 package com.homeshoping.homeshoping.entity.member;
 
+import com.homeshoping.homeshoping.entity.address.Address;
 import com.homeshoping.homeshoping.request.member.MemberCreate;
 import lombok.AccessLevel;
 import lombok.Builder;

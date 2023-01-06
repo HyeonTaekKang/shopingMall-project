@@ -1,11 +1,7 @@
 package com.homeshoping.homeshoping.request.member;
 
-import com.homeshoping.homeshoping.entity.member.Address;
-import com.homeshoping.homeshoping.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.persistence.Embedded;
 
 @Getter
 public class MemberCreate {
