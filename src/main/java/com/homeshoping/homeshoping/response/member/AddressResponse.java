@@ -1,6 +1,6 @@
 package com.homeshoping.homeshoping.response.member;
 
-import com.homeshoping.homeshoping.entity.member.Address;
+import com.homeshoping.homeshoping.entity.address.Address;
 import lombok.Builder;
 import lombok.Getter;
 
