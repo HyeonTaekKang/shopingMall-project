@@ -1,24 +1,20 @@
 package com.homeshoping.homeshoping.service.order;
 
-import com.homeshoping.homeshoping.Exception.ItemNotFound;
-import com.homeshoping.homeshoping.Exception.MemberNotFound;
 import com.homeshoping.homeshoping.entity.Item.Album;
-import com.homeshoping.homeshoping.entity.Item.Item;
-import com.homeshoping.homeshoping.entity.member.Address;
-import com.homeshoping.homeshoping.entity.member.Member;
+import com.homeshoping.homeshoping.entity.address.Address;
+import com.homeshoping.homeshoping.entity.delivery.Delivery;
 import com.homeshoping.homeshoping.entity.order.OrderStatus;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
+import com.homeshoping.homeshoping.repository.delivery.DeliveryRepository;
 import com.homeshoping.homeshoping.repository.member.MemberRepository;
 import com.homeshoping.homeshoping.repository.order.OrderRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.member.AddressCreate;
 import com.homeshoping.homeshoping.request.member.MemberCreate;
 import com.homeshoping.homeshoping.request.order.OrderCreate;
-import com.homeshoping.homeshoping.response.member.MemberResponse;
 import com.homeshoping.homeshoping.response.order.OrderResponse;
 import com.homeshoping.homeshoping.service.Item.ItemService;
 import com.homeshoping.homeshoping.service.member.MemberService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,6 +50,9 @@ class OrderServiceTest {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    DeliveryRepository deliveryRepository;
+
     @PersistenceContext
     EntityManager em;
 
@@ -62,6 +61,7 @@ class OrderServiceTest {
         memberRepository.deleteAll();
         orderRepository.deleteAll();
         itemRepository.deleteAll();
+        deliveryRepository.deleteAll();
     }
 
     @Test
@@ -73,27 +73,19 @@ class OrderServiceTest {
         // member 생성
         MemberCreate newMember = createNewMember();
 
-        // 생성한 member 찾아오기
-//        Member member = memberRepository.findById(1L).orElseThrow(MemberNotFound::new);
-
         // item 생성 ( 앨범 )
         ItemCreate newItem = createNewItem();
 
-        // 생성한 Item 찾아오기
-//        Item item = itemRepository.findById(1L).orElseThrow(ItemNotFound::new);
+        // delivery 생성
+        createNewDelivery();
 
-        // orderCreate
-        OrderCreate orderCreate = OrderCreate.builder()
-                .memberId(1L)
-                .itemId(1L)
-                .orderCount(10)
-                .build();
+        // 새로운 order 셋팅
+        OrderCreate newOrder = createNewOrder();
 
-        // order 생성
-        orderService.create(orderCreate);
+        // 새로운 order 생성
+        orderService.create(newOrder);
 
         // then
-
     }
 
     @Test
@@ -131,7 +123,18 @@ class OrderServiceTest {
 
 
 
+    // 새로운 배달정보 생성 메서드
+    private void createNewDelivery(){
+        Address address = Address.builder()
+                .city("송파구")
+                .street("석촌동")
+                .zipcode("1234")
+                .build();
 
+        Delivery delivery = Delivery.createDelivery(address);
+
+        deliveryRepository.save(delivery);
+    }
 
 
 
@@ -180,6 +183,7 @@ class OrderServiceTest {
         OrderCreate orderCreate = OrderCreate.builder()
                 .memberId(1L)
                 .itemId(1L)
+                .deliveryId(1L)
                 .orderCount(10)
                 .build();
 
