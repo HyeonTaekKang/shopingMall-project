@@ -13,6 +13,7 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,7 +24,7 @@ public class Cart {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private int itemCount;  // 주문수량
+    private int itemCount;  // 카트에 담긴 아이템의 주문수량
 
     private LocalDateTime reg_date; // 장바구니 생성 날짜
 
