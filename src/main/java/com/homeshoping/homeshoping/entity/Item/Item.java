@@ -43,7 +43,6 @@ public class Item {
     @JoinColumn(name="food_id")
     private Food food;
 
-
     @Builder
     public Item(Long id, String name, int price, int stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
         this.id = id;
@@ -54,6 +53,21 @@ public class Item {
         this.itemType = itemType;
         this.album = album;
         this.food = food;
+    }
+
+    // Item 생성 메서드
+    public static Item createItem(ItemCreate itemCreate){
+        Item item = new Item();
+
+        item.name = itemCreate.getName();
+        item.price = itemCreate.getPrice();
+        item.stockQuantity = itemCreate.getStockQuantity();
+        item.date = itemCreate.getDate();
+        item.itemType = itemCreate.getItemType();
+        item.album = itemCreate.getAlbum();
+        item.food = itemCreate.getFood();
+
+        return item;
     }
 
     // 생성자 오버로딩 ( item 추가 )
