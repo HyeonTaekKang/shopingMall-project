@@ -37,6 +37,23 @@ public class Member {
         this.address = address;
     }
 
+    // member 생성 메서드
+    public static Member createMember(MemberCreate memberCreate){
+        Member member = new Member();
+
+        member.name = memberCreate.getName();
+        member.email = memberCreate.getEmail();
+        member.password = memberCreate.getPassword();
+        member.address = Address.builder()
+                .city(memberCreate.getAddressCreate().getCity())
+                .street(memberCreate.getAddressCreate().getStreet())
+                .zipcode(memberCreate.getAddressCreate().getZipcode())
+                .build();
+
+        return member;
+    }
+
+
     // 생성자 오버로딩 ( Member 추가 )
     public Member(MemberCreate memberCreate){
         this.name = memberCreate.getName();
