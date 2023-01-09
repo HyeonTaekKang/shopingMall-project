@@ -8,5 +8,5 @@ import java.util.List;
 public interface CartRepositoryCustom {
 
     // cart 에 담긴 아이템들 가져오기
-    List<Cart> getCartItems();
+    List<Cart> getCartItems(Long memberId);
 }
