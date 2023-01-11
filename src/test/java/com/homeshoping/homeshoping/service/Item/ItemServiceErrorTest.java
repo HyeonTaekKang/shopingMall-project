@@ -1,13 +1,12 @@
 package com.homeshoping.homeshoping.service.Item;
 
 import com.homeshoping.homeshoping.Exception.ItemNotFound;
-import com.homeshoping.homeshoping.entity.Item.Album;
-import com.homeshoping.homeshoping.entity.Item.Food;
+import com.homeshoping.homeshoping.entity.Item.Category.Album;
+import com.homeshoping.homeshoping.entity.Item.Category.Food;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
 import com.homeshoping.homeshoping.response.Item.ItemResponse;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +51,6 @@ public class ItemServiceErrorTest {
                 .name("김치말이국수")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Food")
                 .food(food)
                 .build();
@@ -97,7 +95,6 @@ public class ItemServiceErrorTest {
                     .name("savage" + i)
                     .price(10000)
                     .stockQuantity(10000)
-                    .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
                     .build();
@@ -135,7 +132,6 @@ public class ItemServiceErrorTest {
                     .name("savage" + i)
                     .price(10000)
                     .stockQuantity(10000)
-                    .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
                     .build();

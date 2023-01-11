@@ -1,12 +1,7 @@
 package com.homeshoping.homeshoping.controller.order;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homeshoping.homeshoping.Exception.ItemNotFound;
-import com.homeshoping.homeshoping.Exception.MemberNotFound;
-import com.homeshoping.homeshoping.entity.Item.Album;
-import com.homeshoping.homeshoping.entity.Item.Item;
-import com.homeshoping.homeshoping.entity.member.Member;
+import com.homeshoping.homeshoping.entity.Item.Category.Album;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.repository.member.MemberRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
@@ -15,8 +10,6 @@ import com.homeshoping.homeshoping.request.member.MemberCreate;
 import com.homeshoping.homeshoping.request.order.OrderCreate;
 import com.homeshoping.homeshoping.service.Item.ItemService;
 import com.homeshoping.homeshoping.service.member.MemberService;
-import com.homeshoping.homeshoping.service.order.OrderService;
-import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +25,6 @@ import java.time.LocalDateTime;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -128,7 +120,6 @@ class OrderControllerTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
                 .build();

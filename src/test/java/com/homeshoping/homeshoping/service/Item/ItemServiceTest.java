@@ -1,8 +1,8 @@
 package com.homeshoping.homeshoping.service.Item;
 
 import com.homeshoping.homeshoping.Exception.ItemNotFound;
-import com.homeshoping.homeshoping.entity.Item.Album;
-import com.homeshoping.homeshoping.entity.Item.Food;
+import com.homeshoping.homeshoping.entity.Item.Category.Album;
+import com.homeshoping.homeshoping.entity.Item.Category.Food;
 import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
@@ -56,7 +56,6 @@ class ItemServiceTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
                 .build();
@@ -90,7 +89,6 @@ class ItemServiceTest {
                 .name("김치말이국수")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Food")
                 .food(food)
                 .build();
@@ -122,7 +120,6 @@ class ItemServiceTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
                 .build();
@@ -157,7 +154,6 @@ class ItemServiceTest {
                     .name("savage" + i)
                     .price(10000)
                     .stockQuantity(10000)
-                    .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
                     .build();
@@ -193,7 +189,6 @@ class ItemServiceTest {
                     .name("savage" + i)
                     .price(10000)
                     .stockQuantity(10000)
-                    .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
                     .build();
@@ -231,7 +226,6 @@ class ItemServiceTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
                 .build();
@@ -247,7 +241,6 @@ class ItemServiceTest {
                 .name("hypeboy")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(editedAlbum)
                 .build();
@@ -278,7 +271,6 @@ class ItemServiceTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
                 .build();
@@ -304,7 +296,6 @@ class ItemServiceTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
                 .build();

@@ -1,7 +1,7 @@
 package com.homeshoping.homeshoping.controller.Item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homeshoping.homeshoping.entity.Item.Album;
+import com.homeshoping.homeshoping.entity.Item.Category.Album;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +43,6 @@ public class ItemControllerErrorTest {
         ItemCreate newProduct = ItemCreate.builder()
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
                 .build();
@@ -88,7 +87,6 @@ public class ItemControllerErrorTest {
                 .name("hypeboy")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(editedAlbum)
                 .build();

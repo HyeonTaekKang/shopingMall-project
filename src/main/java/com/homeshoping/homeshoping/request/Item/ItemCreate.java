@@ -1,9 +1,8 @@
 package com.homeshoping.homeshoping.request.Item;
 
 
-import com.homeshoping.homeshoping.entity.Item.Album;
-import com.homeshoping.homeshoping.entity.Item.Food;
-import com.homeshoping.homeshoping.entity.Item.Item;
+import com.homeshoping.homeshoping.entity.Item.Category.Album;
+import com.homeshoping.homeshoping.entity.Item.Category.Food;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,16 +23,18 @@ public class ItemCreate {
     @NotBlank(message = "상품명을 입력해주세요!")
     private String name;     // 상품명
 
-    @NotBlank(message = "상품의 가격을 입력해주세요!")
+    @NotNull(message = "상품의 가격을 입력해주세요!")
     private int price;       // 상품가격
 
-    @NotBlank(message = "상품의 재고를 입력해주세요!")
+    @NotNull(message = "상품의 재고를 입력해주세요!")
     private int stockQuantity;   // 상품재고
 
-    private LocalDateTime date; // 상품 등록 날짜
-
     @NotBlank(message = "상품의 타입을 알려주세요!")
-    private String itemType;
+    private String itemType;  // 상품 타입
+
+    private LocalDateTime createdAt; // 상품 등록 날짜
+
+    private LocalDateTime modifiedAt; // 상품 변경일
 
     // Album
     private Album album;
@@ -42,17 +43,17 @@ public class ItemCreate {
     private Food food;
 
     @Builder
-    public ItemCreate(Long id, String name, int price, int stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
+    public ItemCreate(Long id, String name, int price, int stockQuantity, String itemType, LocalDateTime createdAt, LocalDateTime modifiedAt, Album album, Food food) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.date = date;
         this.itemType = itemType;
+        this.createdAt = LocalDateTime.now(); // 생성날짜를 객체가 생성된 지금으로.
+        this.modifiedAt = modifiedAt;
         this.album = album;
         this.food = food;
     }
-
 
     // == 비지니스 메서드 ==
     // DTO를 엔티티로 변환하여 리턴 ( itemCreate -> Item )

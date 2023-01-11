@@ -1,7 +1,7 @@
 package com.homeshoping.homeshoping.controller.Item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homeshoping.homeshoping.entity.Item.Album;
+import com.homeshoping.homeshoping.entity.Item.Category.Album;
 import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
@@ -44,26 +44,6 @@ class ItemControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    // 상품 등록 메서드 ( with album )
-    private Item saveItemWithAlbum(){
-        Album album = Album.builder()
-                .artist("에스파")
-                .build();
-
-        Item item = Item.builder()
-                .name("savage")
-                .price(10000)
-                .stockQuantity(10000)
-                .date(LocalDateTime.now())
-                .itemType("Album")
-                .album(album)
-                .build();
-
-        itemRepository.save(item);
-
-        return item;
-    }
-
     @Test
     @DisplayName("제품 등록 테스트(앨범)")
     void createProductTest() throws Exception {
@@ -78,7 +58,6 @@ class ItemControllerTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(album)
                 .build();
@@ -112,7 +91,6 @@ class ItemControllerTest {
                     .name("savage" + i)
                     .price(10000)
                     .stockQuantity(10000)
-                    .date(LocalDateTime.now())
                     .itemType("Album")
                     .album(album)
                     .build();
@@ -154,7 +132,6 @@ class ItemControllerTest {
                 .name("hypeboy")
                 .price(10000)
                 .stockQuantity(10000)
-                .date(LocalDateTime.now())
                 .itemType("Album")
                 .album(editedAlbum)
                 .build();
@@ -189,6 +166,24 @@ class ItemControllerTest {
                 .andDo(print());
     }
 
+    // 상품 return 메서드 ( with album )
+    private Item saveItemWithAlbum(){
+        Album album = Album.builder()
+                .artist("에스파")
+                .build();
+
+        Item item = Item.builder()
+                .name("savage")
+                .price(10000)
+                .stockQuantity(10000)
+                .itemType("Album")
+                .album(album)
+                .build();
+
+        itemRepository.save(item);
+
+        return item;
+    }
 
 
 

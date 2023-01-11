@@ -1,14 +1,12 @@
 package com.homeshoping.homeshoping.response.Item;
 
-import com.homeshoping.homeshoping.entity.Item.Album;
-import com.homeshoping.homeshoping.entity.Item.Food;
+import com.homeshoping.homeshoping.entity.Item.Category.Album;
+import com.homeshoping.homeshoping.entity.Item.Category.Food;
 import com.homeshoping.homeshoping.entity.Item.Item;
-import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import lombok.Builder;
 import lombok.Getter;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,8 +16,9 @@ public class ItemResponse {
     private final String name;     // 이름
     private final int price;       // 가격
     private final int stockQuantity;  // 재고
-    private final LocalDateTime date; // 상품 등록 날짜
     private final String itemType; // 상품 타입
+    private final LocalDateTime createdAt; // 상품 등록 날짜
+    private final LocalDateTime modifiedAt; // 상품 변경일
 
     // Album
     private Album album;
@@ -28,13 +27,14 @@ public class ItemResponse {
     private Food food;
 
     @Builder
-    public ItemResponse(Long id, String name, int price, int stockQuantity, LocalDateTime date, String itemType, Album album, Food food) {
+    public ItemResponse(Long id, String name, int price, int stockQuantity, String itemType, LocalDateTime createdAt, LocalDateTime modifiedAt, Album album, Food food) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.date = date;
         this.itemType = itemType;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
         this.album = album;
         this.food = food;
     }
@@ -45,8 +45,9 @@ public class ItemResponse {
         this.name = i.getName();
         this.price = i.getPrice();
         this.stockQuantity = i.getStockQuantity();
-        this.date = i.getDate();
         this.itemType = i.getItemType();
+        this.createdAt = i.getCreatedAt();
+        this.modifiedAt = i.getModifiedAt();
         this.album = i.getAlbum();
         this.food = i.getFood();
     }
