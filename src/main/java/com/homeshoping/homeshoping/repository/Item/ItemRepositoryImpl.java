@@ -1,8 +1,7 @@
 package com.homeshoping.homeshoping.repository.Item;
 
 import com.homeshoping.homeshoping.entity.Item.Item;
-import com.homeshoping.homeshoping.entity.Item.QAlbum;
-import com.homeshoping.homeshoping.entity.Item.QFood;
+
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
-import static com.homeshoping.homeshoping.entity.Item.QAlbum.*;
-import static com.homeshoping.homeshoping.entity.Item.QFood.*;
 import static com.homeshoping.homeshoping.entity.Item.QItem.*;
 
 @RequiredArgsConstructor
@@ -27,7 +24,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .selectFrom(item)
                 .offset(itemSearch.getOffset())
                 .limit(itemSearch.getLimit())
-                .orderBy(item.date.desc())
+                .orderBy(item.createdAt.desc())
                 .fetch();
     }
 
@@ -50,12 +47,6 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 //    }
 
     // item 과 album 같이 select해오기
-    @Override
-    public Item selectItemWithAlbum(Long itemId){
-        return jpaQueryFactory
-                .selectFrom(item)
-                .innerJoin(item.album,album).fetchJoin()
-                .fetchOne();
-    }
+
 
 }
