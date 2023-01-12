@@ -16,11 +16,15 @@ public class OrderCreate {
 
     private int orderCount; // 주문 수량
 
+    private Long couponCode; // 쿠폰 코드
+
+
     @Builder
-    public OrderCreate(Long memberId, Long itemId, Long deliveryId, int orderCount) {
+    public OrderCreate(Long memberId, Long itemId, Long deliveryId, int orderCount, Long couponCode) {
         this.memberId = memberId;
         this.itemId = itemId;
         this.deliveryId = deliveryId;
         this.orderCount = orderCount;
+        this.couponCode = couponCode;
     }
 }
