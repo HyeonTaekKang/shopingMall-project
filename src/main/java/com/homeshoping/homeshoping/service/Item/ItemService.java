@@ -42,14 +42,7 @@ public class ItemService {
         return new ItemResponse(item);
     }
 
-    // 등록한 상품을 하나만 가져오는데 , album도 같이 fetch join해서 가져옴.
-    public ItemResponse getItemWithAlbum(Long id){
 
-        // 상품 하나 찾아오고,
-        Item item = itemRepository.selectItemWithAlbum(id);
-
-        return new ItemResponse(item);
-    }
 
     // 등록한 상품 최신순으로 20개씩 가져오기 (read 20 )
     public List<ItemResponse> getAllRegistratedItem(ItemSearch itemSearch){
