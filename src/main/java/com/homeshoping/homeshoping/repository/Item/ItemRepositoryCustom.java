@@ -20,5 +20,5 @@ public interface ItemRepositoryCustom {
 //    public void deleteFoodById(Long id);
 
     // item 과 album 같이 가져오기
-    Item selectItemWithAlbum(Long itemId);
+
 }
