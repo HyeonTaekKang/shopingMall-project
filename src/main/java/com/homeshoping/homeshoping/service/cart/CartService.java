@@ -1,4 +1,4 @@
-package com.homeshoping.homeshoping.service.coupon.cart;
+package com.homeshoping.homeshoping.service.cart;
 
 import com.homeshoping.homeshoping.Exception.ItemNotFound;
 import com.homeshoping.homeshoping.Exception.MemberNotFound;
