@@ -65,4 +65,10 @@ public class OrderItem {
         this.order = order;
     }
 
+
+    // === 비지니스 메서드 ===
+    // 쿠폰할인이 적용된 가격을 주문가격으로 설정하기 위한 메서드.
+    public void setOrderPrice(int orderItemDiscountPrice){
+        this.orderPrice = orderItemDiscountPrice;
+    }
 }
