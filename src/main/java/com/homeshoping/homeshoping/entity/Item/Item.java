@@ -2,8 +2,10 @@ package com.homeshoping.homeshoping.entity.Item;
 
 import com.homeshoping.homeshoping.entity.Item.Category.Album;
 import com.homeshoping.homeshoping.entity.Item.Category.Food;
+import com.homeshoping.homeshoping.entity.category.Category;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
+import com.homeshoping.homeshoping.request.category.CategoryCreate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,8 +33,9 @@ public class Item {
     @Column(nullable = false)
     private int stockQuantity;  // 상품 재고
 
-    @Column(nullable = false)
-    private String itemType; // 상품 타입
+    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category; // 카테고리
 
     private LocalDateTime createdAt; // 상품 등록 날짜
 
@@ -47,13 +50,13 @@ public class Item {
     private Food food;
 
     @Builder
-    public Item(Long id, String name, int price, int stockQuantity, String itemType, LocalDateTime createdAt, LocalDateTime modifiedAt, Album album, Food food) {
+    public Item(Long id, String name, int price, int stockQuantity, Category category, LocalDateTime createdAt, LocalDateTime modifiedAt, Album album, Food food) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.itemType = itemType;
-        this.createdAt = LocalDateTime.now(); // 생성날짜를 객체가 생성된 지금으로.
+        this.category = category;
+        this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.album = album;
         this.food = food;
@@ -66,7 +69,7 @@ public class Item {
         item.name = itemCreate.getName();
         item.price = itemCreate.getPrice();
         item.stockQuantity = itemCreate.getStockQuantity();
-        item.itemType = itemCreate.getItemType();
+        item.category = itemCreate.getCategory();
         item.createdAt = itemCreate.getCreatedAt();
         item.modifiedAt = itemCreate.getModifiedAt();
         item.album = itemCreate.getAlbum();
@@ -80,7 +83,7 @@ public class Item {
         this.name = itemCreate.getName();
         this.price = itemCreate.getPrice();
         this.stockQuantity = itemCreate.getStockQuantity();
-        this.itemType = itemCreate.getItemType();
+        this.category= itemCreate.getCategory();
         this.createdAt = itemCreate.getCreatedAt();
         this.modifiedAt = itemCreate.getModifiedAt();
         this.album = itemCreate.getAlbum();
@@ -92,7 +95,7 @@ public class Item {
         this.name = itemEdit.getName();
         this.price = itemEdit.getPrice();
         this.stockQuantity = itemEdit.getStockQuantity();
-        this.itemType = itemEdit.getItemType();
+        this.category= itemEdit.getCategory();
         this.createdAt = itemEdit.getCreatedAt();
         this.modifiedAt = itemEdit.getModifiedAt();  // 수정날짜를 객체가 생성된 지금으로.
         this.album = itemEdit.getAlbum();
