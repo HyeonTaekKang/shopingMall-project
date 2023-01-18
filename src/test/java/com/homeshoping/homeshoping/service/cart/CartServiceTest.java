@@ -112,7 +112,7 @@ class CartServiceTest {
                     .name("savage" + i)
                     .price(10000)
                     .stockQuantity(10000)
-                    .itemType("Album")
+
                     .album(album)
                     .build();
 
@@ -148,7 +148,7 @@ class CartServiceTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .itemType("Album")
+
                 .album(album)
                 .build();
 

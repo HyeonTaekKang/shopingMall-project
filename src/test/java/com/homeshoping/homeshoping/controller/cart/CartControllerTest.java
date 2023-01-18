@@ -84,7 +84,7 @@ class CartControllerTest {
                     .name("savage" + i)
                     .price(10000)
                     .stockQuantity(10000)
-                    .itemType("Album")
+
                     .album(album)
                     .build();
 
@@ -120,7 +120,7 @@ class CartControllerTest {
                 .name("savage")
                 .price(10000)
                 .stockQuantity(10000)
-                .itemType("Album")
+
                 .album(album)
                 .build();
 
