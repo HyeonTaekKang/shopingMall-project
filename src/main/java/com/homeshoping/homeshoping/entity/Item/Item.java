@@ -33,6 +33,12 @@ public class Item {
     @Column(nullable = false)
     private int stockQuantity;  // 상품 재고
 
+    @Lob
+    @Column(nullable = false)
+    private String itemInfo; // 상품 상세설명
+
+    private String comment; // 판매자 코멘트
+
     @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category; // 카테고리
@@ -41,6 +47,9 @@ public class Item {
 
     private LocalDateTime modifiedAt; // 상품 변경일
 
+    private Size size;
+
+    private
     @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     @JoinColumn(name="album_id")
     private Album album;
