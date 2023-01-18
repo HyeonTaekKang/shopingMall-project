@@ -1,5 +1,6 @@
 package com.homeshoping.homeshoping.entity.category;
 
+import com.homeshoping.homeshoping.entity.Item.Item;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,12 +15,9 @@ public class Category {
     @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false)
-    private String branch;
+    private String branch;  // 카테고리간의 연관관계를 위한 branch 필드
 
-    private String code;
-
-    private String name;
+    private String name; // 카테고리 이름.
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name ="parent_cagegory_id")
@@ -28,24 +26,18 @@ public class Category {
     @OneToMany (mappedBy = "parentCategory", cascade = CascadeType.ALL)
     private List<Category> subCategory = new ArrayList<>();
 
-    private Integer level;
-
-
-    @Builder
-    public Category(String branch, String code, String name, Integer level,Category parentCategory) {
-        this.branch = branch;
-        this.code = code;
-        this.name = name;
-        this.level = level;
-        this.parentCategory = parentCategory;
-    }
-
-
+    // 연관관계 편의메서드
     public void setParentCategory(Category rootCategory) {
         parentCategory = rootCategory;
+
     }
 
-    public void setLevel(int i) {
-        level = i;
+    @Builder
+    public Category(Long id, String branch, String name, Category parentCategory, List<Category> subCategory) {
+        this.id = id;
+        this.branch = branch;
+        this.name = name;
+        this.parentCategory = parentCategory;
+        this.subCategory = subCategory;
     }
 }
