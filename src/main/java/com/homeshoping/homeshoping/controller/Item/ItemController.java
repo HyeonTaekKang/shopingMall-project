@@ -4,6 +4,7 @@ import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
 import com.homeshoping.homeshoping.response.Item.ItemResponse;
+import com.homeshoping.homeshoping.response.category.CategoryListResponse;
 import com.homeshoping.homeshoping.service.Item.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +30,22 @@ public class ItemController {
         return itemService.getRegistratedItem(itemId);
     }
 
-    // 제품 20개 가져오기
+    // 제품 최신순으로 20개 가져오기
     @GetMapping("/items")
     public List<ItemResponse> readItems(@ModelAttribute ItemSearch itemSearch){
         return itemService.getAllRegistratedItem(itemSearch);
+    }
+
+    // (대분류) 카테고리별로 제품 가져오기
+    @GetMapping("/items/{categoryBranch}")
+    public CategoryListResponse readItemsByCategoryBranch(@PathVariable String categoryBranch){
+        return itemService.findAllItemByCategoryBranch(categoryBranch);
+    }
+
+    // (소분류) 카테고리별로 제품 가져오기
+    @GetMapping("/category/{categoryName}")
+    public CategoryListResponse readItemsByCategoryName(@PathVariable String categoryName){
+        return itemService.findAllItemByCategoryName(categoryName);
     }
 
     // 제품 변경하기
