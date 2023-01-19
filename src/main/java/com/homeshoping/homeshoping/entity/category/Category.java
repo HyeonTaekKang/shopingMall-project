@@ -15,9 +15,9 @@ public class Category {
     @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String branch;  // 카테고리간의 연관관계를 위한 branch 필드
+    private String branch;  // 대분류
 
-    private String name; // 카테고리 이름.
+    private String name; // 소분류
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name ="parent_cagegory_id")
