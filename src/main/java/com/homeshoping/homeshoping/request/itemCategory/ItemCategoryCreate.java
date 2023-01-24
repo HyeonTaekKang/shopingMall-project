@@ -11,6 +11,7 @@ public class ItemCategoryCreate {
 
     private String name; // 소분류
 
+    private ItemCategoryCreate parentItemCategory;
 
     public ItemCategory toEntity(ItemCategoryCreate itemCategoryCreate){
         return ItemCategory.builder()
@@ -25,8 +26,9 @@ public class ItemCategoryCreate {
     }
 
     @Builder
-    public ItemCategoryCreate(String branch, String name) {
+    public ItemCategoryCreate(String branch, String name, ItemCategoryCreate parentItemCategory) {
         this.branch = branch;
         this.name = name;
+        this.parentItemCategory = parentItemCategory;
     }
 }
