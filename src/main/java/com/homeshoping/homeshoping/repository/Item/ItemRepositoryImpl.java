@@ -2,17 +2,16 @@ package com.homeshoping.homeshoping.repository.Item;
 
 import com.homeshoping.homeshoping.entity.Item.Item;
 
-import com.homeshoping.homeshoping.entity.category.QCategory;
-import com.homeshoping.homeshoping.request.Item.ItemCreate;
+import com.homeshoping.homeshoping.entity.ItemCategory.QItemCategory;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.homeshoping.homeshoping.entity.Item.QItem.*;
-import static com.homeshoping.homeshoping.entity.category.QCategory.*;
+import static com.homeshoping.homeshoping.entity.ItemCategory.QItemCategory.*;
+
 
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements ItemRepositoryCustom {
@@ -35,8 +34,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     public List<Item> getAllItemByCategoryBranch(String categoryBranch){
         return jpaQueryFactory
                 .selectFrom(item)
-                .join(item.category, category).fetchJoin()
-                .where(category.branch.eq(categoryBranch))
+                .join(item.itemCategory, itemCategory).fetchJoin()
+                .where(itemCategory.branch.eq(categoryBranch))
                 .orderBy(item.createdAt.desc())
                 .fetch();
     }
@@ -46,8 +45,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     public List<Item> getAllItemByCategoryName(String categoryName){
         return jpaQueryFactory
                 .selectFrom(item)
-                .join(item.category, category).fetchJoin()
-                .where(category.name.eq(categoryName))
+                .join(item.itemCategory, itemCategory).fetchJoin()
+                .where(itemCategory.name.eq(categoryName))
                 .orderBy(item.createdAt.desc())
                 .fetch();
     }
