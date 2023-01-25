@@ -1,18 +1,18 @@
 package com.homeshoping.homeshoping.entity.Item;
-
-import com.homeshoping.homeshoping.entity.Item.Category.Album;
-import com.homeshoping.homeshoping.entity.Item.Category.Food;
-import com.homeshoping.homeshoping.entity.category.Category;
+import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
+import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
+import com.homeshoping.homeshoping.entity.itemOption.ItemOption;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
-import com.homeshoping.homeshoping.request.category.CategoryCreate;
+import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -30,59 +30,50 @@ public class Item {
     @Column(nullable = false)
     private int price;       // 상품 가격
 
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @JoinColumn(name = "itemInfo_id" )
+    private ItemInfo itemInfo;  // 상품 정보
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<ItemOption> itemOptions =  new ArrayList<>(); // 상품 옵션
+
+    @OneToOne( fetch = FetchType.LAZY ,cascade = CascadeType.ALL )
+    @JoinColumn(name = "itemCategory_id")
+    private ItemCategory itemCategory; // 상품 카테고리
+
     @Column(nullable = false)
     private int stockQuantity;  // 상품 재고
 
-    @Lob
-    @Column(nullable = false)
-    private String itemInfo; // 상품 상세설명
-
     private String comment; // 판매자 코멘트
-
-    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category; // 카테고리
 
     private LocalDateTime createdAt; // 상품 등록 날짜
 
     private LocalDateTime modifiedAt; // 상품 변경일
 
-    private Size size;
 
-    private
-    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    @JoinColumn(name="album_id")
-    private Album album;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="food_id")
-    private Food food;
-
-    @Builder
-    public Item(Long id, String name, int price, int stockQuantity, Category category, LocalDateTime createdAt, LocalDateTime modifiedAt, Album album, Food food) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.category = category;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.album = album;
-        this.food = food;
-    }
-
-    // Item 생성 메서드
+    // Item 생성 메서드 ( request 받은 Create DTO를 entity로 변환하는 메서드 )
     public static Item createItem(ItemCreate itemCreate){
         Item item = new Item();
 
         item.name = itemCreate.getName();
         item.price = itemCreate.getPrice();
+
+        // 상품 info 연관관계 맵핑
+        item.itemInfo = itemCreate.toEntity(itemCreate.getItemInfoCreate());
+
+        // 상품 option 연관관계 맵핑
+        List<ItemOption> itemOptionList = itemCreate.getItemOptionCreateList().stream().map(itemOptionCreate -> ItemOption.createItemOption(itemOptionCreate)).collect(Collectors.toList());
+        for (ItemOption itemOption : itemOptionList) {
+            item.addItemOption(itemOption);
+        }
+
+        // 상품 category 연관관계 맵핑
+        item.itemCategory = itemCreate.toEntity(itemCreate.getItemCategoryCreate());
+
         item.stockQuantity = itemCreate.getStockQuantity();
-        item.category = itemCreate.getCategory();
-        item.createdAt = itemCreate.getCreatedAt();
+        item.comment = item.getComment();
+        item.createdAt = LocalDateTime.now();
         item.modifiedAt = itemCreate.getModifiedAt();
-        item.album = itemCreate.getAlbum();
-        item.food = itemCreate.getFood();
 
         return item;
     }
@@ -92,11 +83,9 @@ public class Item {
         this.name = itemCreate.getName();
         this.price = itemCreate.getPrice();
         this.stockQuantity = itemCreate.getStockQuantity();
-        this.category= itemCreate.getCategory();
+//        this.category= itemCreate.getCategory();
         this.createdAt = itemCreate.getCreatedAt();
         this.modifiedAt = itemCreate.getModifiedAt();
-        this.album = itemCreate.getAlbum();
-        this.food = itemCreate.getFood();
     }
 
     // 생성자 오버로딩 ( item 변경 )
@@ -104,11 +93,21 @@ public class Item {
         this.name = itemEdit.getName();
         this.price = itemEdit.getPrice();
         this.stockQuantity = itemEdit.getStockQuantity();
-        this.category= itemEdit.getCategory();
+//        this.category= itemEdit.getItemCategory();
         this.createdAt = itemEdit.getCreatedAt();
         this.modifiedAt = itemEdit.getModifiedAt();  // 수정날짜를 객체가 생성된 지금으로.
-        this.album = itemEdit.getAlbum();
-        this.food = itemEdit.getFood();
+    }
+
+    // 연관관계 편의 메서드
+    private void addItemOption(ItemOption itemOption){
+        itemOptions.add(itemOption);
+        if(itemOption.getItem() != this){
+            itemOption.setItem(this);
+        }
+    }
+
+    private void setItemInfo(ItemInfo itemInfo){
+        this.itemInfo = itemInfo;
     }
 
     // === 비지니스 메서드 ===
