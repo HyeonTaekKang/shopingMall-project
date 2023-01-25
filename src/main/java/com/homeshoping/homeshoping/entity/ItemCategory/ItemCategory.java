@@ -20,7 +20,7 @@ public class ItemCategory {
 
     private String name; // 소분류
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn (name ="parent_cagegory_id")
     private ItemCategory parentItemCategory;
 
