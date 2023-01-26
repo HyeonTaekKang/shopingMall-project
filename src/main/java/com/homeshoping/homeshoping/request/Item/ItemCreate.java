@@ -38,14 +38,12 @@ public class ItemCreate {
     @NotNull(message = "상품의 재고를 입력해주세요!")
     private int stockQuantity;   // 상품재고
 
-    private String comment; // 판매자 코멘트
-
     private LocalDateTime createdAt; // 상품 등록 날짜
 
     private LocalDateTime modifiedAt; // 상품 변경일
 
     @Builder
-    public ItemCreate(Long id, String name, int price, ItemInfoCreate itemInfoCreate, List<ItemOptionCreate> itemOptionCreateList, ItemCategoryCreate itemCategoryCreate, int stockQuantity, String comment, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public ItemCreate(Long id, String name, int price, ItemInfoCreate itemInfoCreate, List<ItemOptionCreate> itemOptionCreateList, ItemCategoryCreate itemCategoryCreate, int stockQuantity, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -53,7 +51,6 @@ public class ItemCreate {
         this.itemOptionCreateList = itemOptionCreateList;
         this.itemCategoryCreate = itemCategoryCreate;
         this.stockQuantity = stockQuantity;
-        this.comment = comment;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -82,6 +79,21 @@ public class ItemCreate {
                         .name(smallItemCategoryCreate.getParentItemCategory().getName())
                         .build())
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return "ItemCreate{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", itemInfoCreate=" + itemInfoCreate.toString() +
+                ", itemOptionCreateList=" + itemOptionCreateList.toString() +
+                ", itemCategoryCreate=" + itemCategoryCreate.toString() +
+                ", stockQuantity=" + stockQuantity +
+                ", createdAt=" + createdAt +
+                ", modifiedAt=" + modifiedAt +
+                '}';
     }
 
     // == 비지니스 메서드 ==
