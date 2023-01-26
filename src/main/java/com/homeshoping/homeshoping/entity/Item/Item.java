@@ -32,7 +32,7 @@ public class Item {
 
     @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "itemInfo_id" )
-    private ItemInfo itemInfo;  // 상품 정보
+    private ItemInfo itemInfo;  // 상품상세정보
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<ItemOption> itemOptions =  new ArrayList<>(); // 상품 옵션
@@ -43,8 +43,6 @@ public class Item {
 
     @Column(nullable = false)
     private int stockQuantity;  // 상품 재고
-
-    private String comment; // 판매자 코멘트
 
     private LocalDateTime createdAt; // 상품 등록 날짜
 
@@ -71,7 +69,6 @@ public class Item {
         item.itemCategory = itemCreate.toEntity(itemCreate.getItemCategoryCreate());
 
         item.stockQuantity = itemCreate.getStockQuantity();
-        item.comment = item.getComment();
         item.createdAt = LocalDateTime.now();
         item.modifiedAt = itemCreate.getModifiedAt();
 
