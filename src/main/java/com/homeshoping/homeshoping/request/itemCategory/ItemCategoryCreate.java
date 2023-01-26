@@ -31,4 +31,13 @@ public class ItemCategoryCreate {
         this.name = name;
         this.parentItemCategory = parentItemCategory;
     }
+
+    @Override
+    public String toString() {
+        return "ItemCategoryCreate{" +
+                "branch='" + branch + '\'' +
+                ", name='" + name + '\'' +
+                ", parentItemCategory=" + parentItemCategory +
+                '}';
+    }
 }
