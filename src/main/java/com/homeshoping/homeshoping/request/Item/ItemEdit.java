@@ -1,7 +1,6 @@
 package com.homeshoping.homeshoping.request.Item;
 
-import com.homeshoping.homeshoping.entity.Item.Category.Album;
-import com.homeshoping.homeshoping.entity.Item.Category.Food;
+import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,30 +24,24 @@ public class ItemEdit {
     private int stockQuantity;  // 재고
 
     @Column(nullable = false)
-    private String itemType; // 상품 타입
+    private ItemCategory itemCategory;
 
     private LocalDateTime createdAt; // 상품 등록 날짜
 
     private LocalDateTime modifiedAt; // 상품 변경일
 
-    // Album
-    private Album album;
-
-    // Food
-    private Food food;
 
     @Builder
-    public ItemEdit(Long id, String name, int price, int stockQuantity, String itemType, LocalDateTime createdAt, LocalDateTime modifiedAt, Album album, Food food) {
+    public ItemEdit(Long id, String name, int price, int stockQuantity, ItemCategory itemCategory, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.itemType = itemType;
+        this.itemCategory = itemCategory;
         this.createdAt = createdAt;
-        this.modifiedAt = LocalDateTime.now();  // 수정날짜를 객체가 생성된 지금으로.
-        this.album = album;
-        this.food = food;
+        this.modifiedAt = modifiedAt;
     }
+
     // 생성자 오버로드 ( 엔티티 -> DTO )
 //    public ItemEdit(Item i) {
 //        this.id = i.getId();
