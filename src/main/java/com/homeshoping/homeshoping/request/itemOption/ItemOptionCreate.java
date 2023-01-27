@@ -46,4 +46,20 @@ public class ItemOptionCreate {
         this.optionalItem10 = optionalItem10;
     }
 
+    @Override
+    public String toString() {
+        return "ItemOptionCreate{" +
+                "optionName='" + optionName + '\'' +
+                ", optionalItem1='" + optionalItem1 + '\'' +
+                ", optionalItem2='" + optionalItem2 + '\'' +
+                ", optionalItem3='" + optionalItem3 + '\'' +
+                ", optionalItem4='" + optionalItem4 + '\'' +
+                ", optionalItem5='" + optionalItem5 + '\'' +
+                ", optionalItem6='" + optionalItem6 + '\'' +
+                ", optionalItem7='" + optionalItem7 + '\'' +
+                ", optionalItem8='" + optionalItem8 + '\'' +
+                ", optionalItem9='" + optionalItem9 + '\'' +
+                ", optionalItem10='" + optionalItem10 + '\'' +
+                '}';
+    }
 }
