@@ -13,6 +13,7 @@ import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
 
 import com.homeshoping.homeshoping.request.itemInfo.ItemInfoCreate;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
+import com.homeshoping.homeshoping.response.Item.ItemResponse;
 import com.homeshoping.homeshoping.service.itemCategory.ItemCategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
 class ItemServiceTest {
 
     @Autowired
@@ -62,7 +63,8 @@ class ItemServiceTest {
     @Test
     @DisplayName("상품 등록 테스트")
     @Rollback(value = false)
-    void itemRegistrationTest1(){
+    @Transactional
+    void itemRegistrationTest(){
 
         // given
         // 아이템 info 생성.
@@ -78,23 +80,26 @@ class ItemServiceTest {
                 .parentItemCategory(bigItemCategory)
                 .build();
 
-//        // 아이템 option 생성.
-//        List<ItemOptionCreate> itemOptionCreateList = createItemOption();
+        // 아이템 option 생성.
+        List<ItemOptionCreate> itemOptionCreateList = createItemOption();
 
         // 생성할 아이템 셋팅
         ItemCreate itemCreate = ItemCreate.builder()
                 .name("와이드팬츠")
                 .price(10000)
-                .stockQuantity(10000)
                 .itemInfoCreate(itemInfoCreate)
+                .itemOptionCreateList(itemOptionCreateList)
                 .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
-//                .itemOptionCreateList(itemOptionCreateList)
+                .stockQuantity(10000)
+                .itemOptionCreateList(itemOptionCreateList)
                 .createdAt(LocalDateTime.now())
                 .build();
 
         // when
         // 상품 등록
         itemService.itemRegistration(itemCreate);
+
+        System.out.println("itemCreate.toString() = " + itemCreate.toString());
 
         // then
         // 상품 검증
@@ -105,35 +110,20 @@ class ItemServiceTest {
     }
 
 
-//    @Test
-//    @DisplayName("상품 등록 테스트(음식)")
-//    @Rollback(value = false)
-//    void itemRegistrationTest2(){
-//
-//        Food food = Food.builder()
-//                .madeIn("한국")
-//                .manufacturer("(주)하림")
-//                .expirationDate(LocalDateTime.parse("2007-12-03T10:15:30"))
-//                .build();
-//
-//        ItemCreate itemCreate = ItemCreate.builder()
-//                .name("김치말이국수")
-//                .price(10000)
-//                .stockQuantity(10000)
-//
-//                .food(food)
-//                .build();
-//
-//        itemService.itemRegistration(itemCreate);
-//
-//        // then
-//        // 상품 검증
-//        assertEquals("김치말이국수",itemCreate.getName());
-//        assertEquals(10000,itemCreate.getPrice());
-//        assertEquals(10000,itemCreate.getStockQuantity());
-//        assertEquals("한국",itemCreate.getFood().getMadeIn());
-//        assertEquals("(주)하림",itemCreate.getFood().getManufacturer());
-//    }
+    @Test
+    @DisplayName("등록된 상품 1개 가져오기 테스트")
+    @Rollback(value = false)
+    @Transactional
+    void getRegistratedItemTest(){
+
+        // 상품 생성후, 생성한 아이템의 id 가져오기
+        Long itemId = createItem();
+
+        ItemResponse registratedItem = itemService.getRegistratedItem(itemId);
+
+        System.out.println("registratedItem = " + registratedItem.toString());
+    }
+
 //
 //    @Test
 //    @DisplayName("카테고리별 아이템 가져오기 테스트")
@@ -351,6 +341,44 @@ class ItemServiceTest {
 //        assertEquals(0,itemRepository.count());
 //    }
 
+    // 상품 등록 메서드
+    private Long createItem(){
+
+        // given
+        // 아이템 info 생성.
+        ItemInfoCreate itemInfoCreate = createItemInfo();
+
+        // 대분류 아이템 category 생성. ( 대분류(branch) = 패션 , 소분류(name) = ROOT )
+        ItemCategoryCreate bigItemCategory = createBigItemCategory();
+
+        // 소분류 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
+        ItemCategoryCreate smallItemCategory = ItemCategoryCreate.builder()
+                .branch("패션")
+                .name("PANTS")
+                .parentItemCategory(bigItemCategory)
+                .build();
+
+        // 아이템 option 생성.
+        List<ItemOptionCreate> itemOptionCreateList = createItemOption();
+
+        // 생성할 아이템 셋팅
+        ItemCreate itemCreate = ItemCreate.builder()
+                .name("와이드팬츠")
+                .price(10000)
+                .itemInfoCreate(itemInfoCreate)
+                .itemOptionCreateList(itemOptionCreateList)
+                .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
+                .stockQuantity(10000)
+                .itemOptionCreateList(itemOptionCreateList)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        // when
+        // 상품 등록
+        Long itemId = itemService.itemRegistration(itemCreate);
+        return itemId;
+    }
+
     // 새로운 ItemInfo 생성
     private ItemInfoCreate createItemInfo(){
         return ItemInfoCreate.builder()
@@ -360,6 +388,8 @@ class ItemServiceTest {
                 .size("S,M,L")
                 .maker("(주)한국꺼")
                 .washingMethod("드라이클리닝")
+                .yearAndMonthofManufacture(LocalDate.now())
+                .manager("강현택")
                 .qualityStandard("잘 보존하세요")
                 .build();
     }
@@ -405,20 +435,6 @@ class ItemServiceTest {
         return bigItemCategoryCreate;
     }
 
-    private ItemCategory createCategory1(){
-        // 대분류 생성
-        ItemCategoryCreate bigItemCategoryCreate = ItemCategoryCreate.builder()
-                .branch("패션")
-                .name("ROOT")
-                .build();
-
-        itemCategoryService.createBigCategory(bigItemCategoryCreate);
-
-        ItemCategory parentItemCategory = itemCategoryRepository.findByBranchAndName(bigItemCategoryCreate.getBranch(),"ROOT")
-                .orElseThrow(() -> new IllegalArgumentException("부모 카테고리 없음 예외"));
-
-        return parentItemCategory;
-    }
 
 
 }
