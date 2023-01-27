@@ -8,6 +8,8 @@ import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,10 +62,7 @@ public class Item {
         item.itemInfo = itemCreate.toEntity(itemCreate.getItemInfoCreate());
 
         // 상품 option 연관관계 맵핑
-        List<ItemOption> itemOptionList = itemCreate.getItemOptionCreateList().stream().map(itemOptionCreate -> ItemOption.createItemOption(itemOptionCreate)).collect(Collectors.toList());
-        for (ItemOption itemOption : itemOptionList) {
-            item.addItemOption(itemOption);
-        }
+        item.itemOptions = itemCreate.getItemOptionCreateList().stream().map(itemOptionCreate -> ItemOption.createItemOption(itemOptionCreate)).collect(Collectors.toList());
 
         // 상품 category 연관관계 맵핑
         item.itemCategory = itemCreate.toEntity(itemCreate.getItemCategoryCreate());
