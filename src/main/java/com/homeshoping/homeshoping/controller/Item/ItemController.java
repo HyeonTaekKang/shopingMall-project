@@ -31,10 +31,10 @@ public class ItemController {
     }
 
     // 제품 최신순으로 20개 가져오기
-//    @GetMapping("/items")
-//    public List<ItemResponse> readItems(@ModelAttribute ItemSearch itemSearch){
-//        return itemService.getAllRegistratedItem(itemSearch);
-//    }
+    @GetMapping("/items")
+    public List<ItemResponse> readItems(@ModelAttribute ItemSearch itemSearch){
+        return itemService.getLatestItems(itemSearch);
+    }
 //
 //    // (대분류) 카테고리별로 제품 가져오기
 //    @GetMapping("/items/{categoryBranch}")
