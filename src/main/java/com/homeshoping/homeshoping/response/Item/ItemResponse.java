@@ -1,55 +1,72 @@
 package com.homeshoping.homeshoping.response.Item;
 
-import com.homeshoping.homeshoping.entity.Item.Category.Album;
-import com.homeshoping.homeshoping.entity.Item.Category.Food;
 import com.homeshoping.homeshoping.entity.Item.Item;
+import com.homeshoping.homeshoping.entity.itemOption.ItemOption;
+import com.homeshoping.homeshoping.repository.Item.ItemRepository;
+import com.homeshoping.homeshoping.response.ItemCategory.ItemCategoryResponse;
+import com.homeshoping.homeshoping.response.ItemInfo.ItemInfoResponse;
+import com.homeshoping.homeshoping.response.ItemOption.ItemOptionResponse;
+import com.homeshoping.homeshoping.response.category.CategoryResponse;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
+@NoArgsConstructor
 public class ItemResponse {
 
-    private final Long id; // 상품 id
-    private final String name;     // 이름
-    private final int price;       // 가격
-    private final int stockQuantity;  // 재고
-    private final String itemType; // 상품 타입
-    private final LocalDateTime createdAt; // 상품 등록 날짜
-    private final LocalDateTime modifiedAt; // 상품 변경일
+    private Long id; // 상품 id
 
-    // Album
-    private Album album;
+    private String name;     // 이름
 
-    // Food
-    private Food food;
+    private int price;       // 가격
 
-    @Builder
-    public ItemResponse(Long id, String name, int price, int stockQuantity, String itemType, LocalDateTime createdAt, LocalDateTime modifiedAt, Album album, Food food) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.itemType = itemType;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.album = album;
-        this.food = food;
+    private ItemInfoResponse itemInfoResponse; // 상품상세정보
+
+    private List<ItemOptionResponse> itemOptionResponseList = new ArrayList<>(); // 상품 옵션
+
+    private ItemCategoryResponse itemCategoryResponse; // 상품 카테고리
+
+    private int stockQuantity;  // 재고
+
+
+    // entity -> DTO
+    public static ItemResponse createItemResponse(Item item){
+        ItemResponse itemResponse = new ItemResponse();
+
+        itemResponse.id = item.getId();
+        itemResponse.name = item.getName();
+        itemResponse.price = item.getPrice();
+
+        itemResponse.itemInfoResponse = ItemInfoResponse.toDTO(item.getItemInfo());
+
+        itemResponse.itemOptionResponseList = item.getItemOptions().stream()
+                .map(itemOption -> new ItemOptionResponse(itemOption)).collect(Collectors.toList());
+
+        itemResponse.itemCategoryResponse = ItemCategoryResponse.toDTO(item.getItemCategory());
+
+        itemResponse.stockQuantity = item.getStockQuantity();
+
+        return itemResponse;
     }
 
-    // 생성자 오버로딩 ( 엔티티 -> DTO )
-    public ItemResponse(Item i) {
-        this.id = i.getId();
-        this.name = i.getName();
-        this.price = i.getPrice();
-        this.stockQuantity = i.getStockQuantity();
-        this.itemType = i.getItemType();
-        this.createdAt = i.getCreatedAt();
-        this.modifiedAt = i.getModifiedAt();
-        this.album = i.getAlbum();
-        this.food = i.getFood();
+    @Override
+    public String toString() {
+        return "ItemResponse{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", itemInfoResponse=" + itemInfoResponse +
+                ", itemOptionResponseList=" + itemOptionResponseList +
+                ", itemCategoryResponse=" + itemCategoryResponse +
+                ", stockQuantity=" + stockQuantity +
+                '}';
     }
 
     // == 비지니스 메서드 ==
@@ -66,4 +83,5 @@ public class ItemResponse {
 //                .food(item.getFood())
 //                .build();
 //    }
+
 }
