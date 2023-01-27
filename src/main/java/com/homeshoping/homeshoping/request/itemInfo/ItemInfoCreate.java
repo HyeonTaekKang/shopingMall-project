@@ -45,5 +45,18 @@ public class ItemInfoCreate {
         return ItemInfo.createItemInfo(itemInfoCreate);
     }
 
-
+    @Override
+    public String toString() {
+        return "ItemInfoCreate{" +
+                "manufactureCountry='" + manufactureCountry + '\'' +
+                ", material='" + material + '\'' +
+                ", color='" + color + '\'' +
+                ", size='" + size + '\'' +
+                ", maker='" + maker + '\'' +
+                ", washingMethod='" + washingMethod + '\'' +
+                ", yearAndMonthofManufacture=" + yearAndMonthofManufacture +
+                ", manager='" + manager + '\'' +
+                ", qualityStandard='" + qualityStandard + '\'' +
+                '}';
+    }
 }
