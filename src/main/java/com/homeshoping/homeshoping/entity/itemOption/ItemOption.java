@@ -66,7 +66,7 @@ public class ItemOption {
     public static ItemOption createItemOption(ItemOptionCreate itemOptionCreate){
         ItemOption itemOption = new ItemOption();
 
-        itemOption.optionName = itemOption.getOptionName();
+        itemOption.optionName = itemOptionCreate.getOptionName();
         itemOption.optionalItem1 = itemOptionCreate.getOptionalItem1();
         itemOption.optionalItem2 = itemOptionCreate.getOptionalItem2();
         itemOption.optionalItem3 = itemOptionCreate.getOptionalItem3();
