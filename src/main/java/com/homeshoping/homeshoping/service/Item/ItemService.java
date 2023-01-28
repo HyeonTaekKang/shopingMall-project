@@ -44,17 +44,16 @@ public class ItemService {
         // 엔티티 -> DTO로 변경해서 리턴
         return ItemResponse.createItemResponse(item);
     }
-//
-//
-//    // 등록한 상품 최신순으로 20개씩 가져오기 (read 20 )
-//    public List<ItemResponse> getAllRegistratedItem(ItemSearch itemSearch){
-//
-//        // 등록한 상품 20개를 최신순으로 리스트형태로 가져오고,
-//        List<Item> items = itemRepository.getAllRegistratedItemWithPaging(itemSearch); // [{},{}] -> Item
-//
-//        // 리스트안에 있는 item 객체를 itemResponse객체로 변경한다음, 그 변경한 객체를 리스트 안에 담아서 리턴
-//        return items.stream().map(i -> new ItemResponse(i)).collect(Collectors.toList());
-//    }
+
+    // 등록한 상품 최신순으로 20개씩 가져오기 (read 20 )
+    public List<ItemResponse> getLatestItems(ItemSearch itemSearch){
+
+        // 등록한 상품 20개를 최신순으로 리스트형태로 가져오고,
+        List<Item> items = itemRepository.getLatestItems(itemSearch); // [{},{}] -> Item
+
+        // 리스트안에 있는 item 객체를 itemResponse객체로 변경한다음, 그 변경한 객체를 리스트 안에 담아서 리턴
+        return items.stream().map(item -> ItemResponse.createItemResponse(item)).collect(Collectors.toList());
+    }
 //
 //    // ( 대분류 ) 카테고리별로 상품 가져오기
 //    public CategoryListResponse findAllItemByCategoryBranch(String categoryBranch){
