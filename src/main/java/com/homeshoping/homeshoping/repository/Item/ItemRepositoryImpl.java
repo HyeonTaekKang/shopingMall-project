@@ -21,7 +21,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    // 등록한 상품 정보 1개 가져오기
+    // item의 id로 등록한 상품 정보 1개 가져오기
     @Override
     public Item getItem(Long itemId) {
         return jpaQueryFactory
@@ -33,15 +33,17 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     // 등록한 상품 최신순으로 20개씩 가져오기
-//    @Override
-//    public List<Item> getAllRegistratedItemWithPaging(ItemSearch itemSearch) {
-//        return jpaQueryFactory
-//                .selectFrom(item)
-//                .offset(itemSearch.getOffset())
-//                .limit(itemSearch.getLimit())
-//                .orderBy(item.createdAt.desc())
-//                .fetch();
-//    }
+    @Override
+    public List<Item> getLatestItems(ItemSearch itemSearch) {
+        return jpaQueryFactory
+                .selectFrom(item)
+                .innerJoin(item.itemCategory, itemCategory).fetchJoin()
+                .innerJoin(item.itemInfo, itemInfo).fetchJoin()
+                .offset(itemSearch.getOffset())
+                .limit(itemSearch.getLimit())
+                .orderBy(item.createdAt.desc())
+                .fetch();
+    }
 //
 //    // 대분류 카테고리별로 상품 가져오기
 //    @Override
