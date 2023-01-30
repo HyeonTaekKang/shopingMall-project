@@ -55,32 +55,6 @@ public class ItemCreate {
         this.modifiedAt = modifiedAt;
     }
 
-    // DTO -> entity
-    public ItemInfo toEntity(ItemInfoCreate itemInfoCreate){
-        return ItemInfo.builder()
-                .manufactureCountry(itemInfoCreate.getManufactureCountry())
-                .material(itemInfoCreate.getMaterial())
-                .color(itemInfoCreate.getColor())
-                .size(itemInfoCreate.getSize())
-                .maker(itemInfoCreate.getMaker())
-                .washingMethod(itemInfoCreate.getWashingMethod())
-                .yearAndMonthofManufacture(itemInfoCreate.getYearAndMonthofManufacture())
-                .manager(itemInfoCreate.getManager())
-                .qualityStandard(itemInfoCreate.getQualityStandard())
-                .build();
-    }
-
-    public ItemCategory toEntity(ItemCategoryCreate smallItemCategoryCreate){
-        return ItemCategory.builder()
-                .branch(smallItemCategoryCreate.getBranch())
-                .name(smallItemCategoryCreate.getName())
-                .parentItemCategory(ItemCategory.builder()
-                        .branch(smallItemCategoryCreate.getParentItemCategory().getBranch())
-                        .name(smallItemCategoryCreate.getParentItemCategory().getName())
-                        .build())
-                .build();
-    }
-
     @Override
     public String toString() {
         return "ItemCreate{" +
