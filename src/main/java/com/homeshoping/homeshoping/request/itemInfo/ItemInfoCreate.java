@@ -41,10 +41,20 @@ public class ItemInfoCreate {
         this.qualityStandard = qualityStandard;
     }
 
-    public ItemInfo toEntity(ItemInfoCreate itemInfoCreate){
-        return ItemInfo.createItemInfo(itemInfoCreate);
+    // DTO -> entity ( itemInfoCreate -> itemInfo )
+    public static ItemInfo toEntity(ItemInfoCreate itemInfoCreate){
+        return ItemInfo.builder()
+                .manufactureCountry(itemInfoCreate.getManufactureCountry())
+                .material(itemInfoCreate.getMaterial())
+                .color(itemInfoCreate.getColor())
+                .size(itemInfoCreate.getSize())
+                .maker(itemInfoCreate.getMaker())
+                .washingMethod(itemInfoCreate.getWashingMethod())
+                .yearAndMonthofManufacture(itemInfoCreate.getYearAndMonthofManufacture())
+                .manager(itemInfoCreate.getManager())
+                .qualityStandard(itemInfoCreate.getQualityStandard())
+                .build();
     }
-
     @Override
     public String toString() {
         return "ItemInfoCreate{" +
