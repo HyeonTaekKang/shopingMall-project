@@ -91,7 +91,7 @@ public class Item {
         item.itemOptions = itemEdit.getItemOptionEditList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity(itemOptionEdit)).collect(Collectors.toList());
 
         // 상품 category 연관관계 맵핑
-        item.itemCategory = itemEdit.toEntity(itemEdit.getItemCategoryEdit());
+        item.itemCategory = itemEdit.getItemCategoryEdit().toEntity(itemEdit.getItemCategoryEdit());
 
         item.stockQuantity = itemEdit.getStockQuantity();
         item.createdAt = itemEdit.getCreatedAt();
