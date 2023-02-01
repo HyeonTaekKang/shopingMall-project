@@ -4,7 +4,10 @@ import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
 import com.homeshoping.homeshoping.entity.itemOption.ItemOption;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
+import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
+import com.homeshoping.homeshoping.request.itemInfo.ItemInfoCreate;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
+import com.homeshoping.homeshoping.request.itemOption.ItemOptionEdit;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,13 +62,13 @@ public class Item {
         item.price = itemCreate.getPrice();
 
         // 상품 info 연관관계 맵핑
-        item.itemInfo = itemCreate.toEntity(itemCreate.getItemInfoCreate());
+        item.itemInfo = ItemInfoCreate.toEntity(itemCreate.getItemInfoCreate());
 
         // 상품 option 연관관계 맵핑
-        item.itemOptions = itemCreate.getItemOptionCreateList().stream().map(itemOptionCreate -> ItemOption.createItemOption(itemOptionCreate)).collect(Collectors.toList());
+        item.itemOptions = itemCreate.getItemOptionCreateList().stream().map(itemOptionCreate -> itemOptionCreate.toEntity(itemOptionCreate)).collect(Collectors.toList());
 
         // 상품 category 연관관계 맵핑
-        item.itemCategory = itemCreate.toEntity(itemCreate.getItemCategoryCreate());
+        item.itemCategory = ItemCategoryCreate.toEntity(itemCreate.getItemCategoryCreate());
 
         item.stockQuantity = itemCreate.getStockQuantity();
         item.createdAt = LocalDateTime.now();
@@ -73,6 +76,30 @@ public class Item {
 
         return item;
     }
+
+    // Item 변경 메서드 ( request 받은 Create DTO를 entity로 변환하는 메서드 )
+    public Item editItem(ItemEdit itemEdit){
+        Item item = new Item();
+
+        item.name = itemEdit.getName();
+        item.price = itemEdit.getPrice();
+
+        // 상품 info 연관관계 맵핑
+        item.itemInfo = itemEdit.getItemInfoEdit().toEntity(itemEdit.getItemInfoEdit());
+
+        // 상품 option 연관관계 맵핑
+        item.itemOptions = itemEdit.getItemOptionEditList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity(itemOptionEdit)).collect(Collectors.toList());
+
+        // 상품 category 연관관계 맵핑
+        item.itemCategory = itemEdit.toEntity(itemEdit.getItemCategoryEdit());
+
+        item.stockQuantity = itemEdit.getStockQuantity();
+        item.createdAt = itemEdit.getCreatedAt();
+        item.modifiedAt = LocalDateTime.now();
+
+        return item;
+    }
+
 
     // 생성자 오버로딩 ( item 추가 )
     public Item(ItemCreate itemCreate) {
