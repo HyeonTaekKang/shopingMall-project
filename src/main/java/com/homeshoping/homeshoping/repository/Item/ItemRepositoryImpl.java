@@ -44,28 +44,30 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .orderBy(item.createdAt.desc())
                 .fetch();
     }
-//
-//    // 대분류 카테고리별로 상품 가져오기
-//    @Override
-//    public List<Item> getAllItemByCategoryBranch(String categoryBranch){
-//        return jpaQueryFactory
-//                .selectFrom(item)
-//                .join(item.itemCategory, itemCategory).fetchJoin()
-//                .where(itemCategory.branch.eq(categoryBranch))
-//                .orderBy(item.createdAt.desc())
-//                .fetch();
-//    }
-//
-//    // 소분류 카테고리별로 상품 가져오기
-//    @Override
-//    public List<Item> getAllItemByCategoryName(String categoryName){
-//        return jpaQueryFactory
-//                .selectFrom(item)
-//                .join(item.itemCategory, itemCategory).fetchJoin()
-//                .where(itemCategory.name.eq(categoryName))
-//                .orderBy(item.createdAt.desc())
-//                .fetch();
-//    }
+
+    // 대분류 카테고리별로 상품 가져오기
+    @Override
+    public List<Item> getAllItemByCategoryBranch(String categoryBranch){
+        return jpaQueryFactory
+                .selectFrom(item)
+                .innerJoin(item.itemCategory, itemCategory).fetchJoin()
+                .innerJoin(item.itemInfo, itemInfo).fetchJoin()
+                .where(itemCategory.branch.eq(categoryBranch))
+                .orderBy(item.createdAt.desc())
+                .fetch();
+    }
+
+    // 소분류 카테고리별로 상품 가져오기
+    @Override
+    public List<Item> getAllItemByCategoryName(String categoryName){
+        return jpaQueryFactory
+                .selectFrom(item)
+                .innerJoin(item.itemCategory, itemCategory).fetchJoin()
+                .innerJoin(item.itemInfo, itemInfo).fetchJoin()
+                .where(itemCategory.name.eq(categoryName))
+                .orderBy(item.createdAt.desc())
+                .fetch();
+    }
 
 //    // Album 삭제
 //    @Override
