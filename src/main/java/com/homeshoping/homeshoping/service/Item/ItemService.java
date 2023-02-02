@@ -54,44 +54,46 @@ public class ItemService {
         // 리스트안에 있는 item 객체를 itemResponse객체로 변경한다음, 그 변경한 객체를 리스트 안에 담아서 리턴
         return items.stream().map(item -> ItemResponse.createItemResponse(item)).collect(Collectors.toList());
     }
+
+    // ( 대분류 ) 카테고리별로 상품 가져오기
+    public CategoryListResponse findAllItemByCategoryBranch(String categoryBranch){
+
+        // 같은 categoryBranch인 Item들을 리스트에 담아옴
+        List<Item> items = itemRepository.getAllItemByCategoryBranch(categoryBranch); //[{} , {}]
+
+        // 엔티티 -> DTO
+        // 리스트안에 있는 item 객체를 itemResponse객체로 변경한다음, 그 변경한 객체를 리스트 안에 담기.
+        List<ItemResponse> itemDto = items.stream().map(item -> ItemResponse.createItemResponse(item)).collect(Collectors.toList());
+
+        return new CategoryListResponse(itemDto);
+    }
+
+    // ( 소분류 ) 카테고리별로 상품 가져오기
+    public CategoryListResponse findAllItemByCategoryName(String categoryName){
+
+        // 같은 categoryName인 Item들을 리스트에 담아옴
+        List<Item> items = itemRepository.getAllItemByCategoryName(categoryName); //[{} , {}]
+
+        // 엔티티 -> DTO
+        // 리스트안에 있는 item 객체를 itemResponse객체로 변경한다음, 그 변경한 객체를 리스트 안에 담아서 리턴
+        List<ItemResponse> itemDto = items.stream().map(item -> ItemResponse.createItemResponse(item)).collect(Collectors.toList());
+
+        return new CategoryListResponse(itemDto);
+    }
 //
-//    // ( 대분류 ) 카테고리별로 상품 가져오기
-//    public CategoryListResponse findAllItemByCategoryBranch(String categoryBranch){
 //
-//        // 같은 categoryBranch인 Item들을 리스트에 담아옴
-//        List<Item> items = itemRepository.getAllItemByCategoryBranch(categoryBranch); //[{} , {}]
-//
-//        // 엔티티 -> DTO
-//        // 리스트안에 있는 item 객체를 itemResponse객체로 변경한다음, 그 변경한 객체를 리스트 안에 담아서 리턴
-//        List<ItemResponse> itemDto = items.stream().map(i -> new ItemResponse(i)).collect(Collectors.toList());
-//
-//        return new CategoryListResponse(itemDto);
-//    }
-//
-//    // ( 소분류 ) 카테고리별로 상품 가져오기
-//    public CategoryListResponse findAllItemByCategoryName(String categoryName){
-//
-//        // 같은 categoryName인 Item들을 리스트에 담아옴
-//        List<Item> items = itemRepository.getAllItemByCategoryName(categoryName); //[{} , {}]
-//
-//        // 엔티티 -> DTO
-//        // 리스트안에 있는 item 객체를 itemResponse객체로 변경한다음, 그 변경한 객체를 리스트 안에 담아서 리턴
-//        List<ItemResponse> itemDto = items.stream().map(i -> new ItemResponse(i)).collect(Collectors.toList());
-//
-//        return new CategoryListResponse(itemDto);
-//    }
-//
-//
-//    // 상품 변경하기
-//    @Transactional  // (변경할 상품id , 변경된 상품)
-//    public void editItem(Long itemId, ItemEdit itemEdit){
-//
-//        // 변경할 상품을 상품id로 가져오기.
-//        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFound());
-//
-//        // 상품 변경
-//        Item editedItem = new Item(itemEdit);
-//    }
+    // 상품 변경하기
+    @Transactional  // (변경할 상품id , 변경된 상품)
+    public void editItem(Long itemId, ItemEdit itemEdit){
+
+        // 변경할 상품을 상품id로 가져오기.
+        Item item = itemRepository.getItem(itemId);
+
+        // 상품 변경
+        item.editItem(itemEdit);
+
+
+    }
 //
 //    // 등록한 상품 삭제하기 ( delete )
 //    @Transactional
