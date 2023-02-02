@@ -13,16 +13,17 @@ public class ItemCategoryCreate {
 
     private ItemCategoryCreate parentItemCategory;
 
-    public ItemCategory toEntity(ItemCategoryCreate itemCategoryCreate){
+    // DTO -> entity ( itemCategoryCreate -> itemCategory )
+    public static ItemCategory toEntity(ItemCategoryCreate smallItemCategoryCreate){
         return ItemCategory.builder()
-                .branch(itemCategoryCreate.branch)
-                .name(itemCategoryCreate.name)
+                .branch(smallItemCategoryCreate.getBranch())
+                .name(smallItemCategoryCreate.getName())
+                .parentItemCategory(
+                        ItemCategory.builder()
+                                .branch(smallItemCategoryCreate.getParentItemCategory().getBranch())
+                                .name(smallItemCategoryCreate.getParentItemCategory().getName())
+                                .build())
                 .build();
-    }
-
-    // DTO -> entity
-    public ItemCategory toEntity(){
-        return ItemCategory.createCategory(this);
     }
 
     @Builder
