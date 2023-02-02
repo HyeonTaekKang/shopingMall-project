@@ -46,6 +46,22 @@ public class ItemOptionCreate {
         this.optionalItem10 = optionalItem10;
     }
 
+    public ItemOption toEntity(ItemOptionCreate itemOptionCreate){
+        return ItemOption.builder()
+                .optionName(itemOptionCreate.getOptionName())
+                .optionalItem1(itemOptionCreate.getOptionalItem1())
+                .optionalItem2(itemOptionCreate.getOptionalItem2())
+                .optionalItem3(itemOptionCreate.getOptionalItem3())
+                .optionalItem4(itemOptionCreate.getOptionalItem4())
+                .optionalItem5(itemOptionCreate.getOptionalItem5())
+                .optionalItem6(itemOptionCreate.getOptionalItem6())
+                .optionalItem7(itemOptionCreate.getOptionalItem7())
+                .optionalItem8(itemOptionCreate.getOptionalItem8())
+                .optionalItem9(itemOptionCreate.getOptionalItem9())
+                .optionalItem10(itemOptionCreate.getOptionalItem10())
+                .build();
+    }
+
     @Override
     public String toString() {
         return "ItemOptionCreate{" +
