@@ -78,26 +78,23 @@ public class Item {
     }
 
     // Item 변경 메서드 ( request 받은 Create DTO를 entity로 변환하는 메서드 )
-    public Item editItem(ItemEdit itemEdit){
-        Item item = new Item();
+    public void editItem(ItemEdit itemEdit){
 
-        item.name = itemEdit.getName();
-        item.price = itemEdit.getPrice();
+        this.name = itemEdit.getName();
+        this.price = itemEdit.getPrice();
 
         // 상품 info 연관관계 맵핑
-        item.itemInfo = itemEdit.getItemInfoEdit().toEntity(itemEdit.getItemInfoEdit());
+        this.itemInfo = itemEdit.getEditedItemInfo().toEntity(itemEdit.getEditedItemInfo());
 
         // 상품 option 연관관계 맵핑
-        item.itemOptions = itemEdit.getItemOptionEditList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity(itemOptionEdit)).collect(Collectors.toList());
+        this.itemOptions = itemEdit.getEditedItemOptionList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity(itemOptionEdit)).collect(Collectors.toList());
 
         // 상품 category 연관관계 맵핑
-        item.itemCategory = itemEdit.getItemCategoryEdit().toEntity(itemEdit.getItemCategoryEdit());
+        this.itemCategory = itemEdit.getEditedItemCategory().toEntity(itemEdit.getEditedItemCategory());
 
-        item.stockQuantity = itemEdit.getStockQuantity();
-        item.createdAt = itemEdit.getCreatedAt();
-        item.modifiedAt = LocalDateTime.now();
-
-        return item;
+        this.stockQuantity = itemEdit.getStockQuantity();
+        this.createdAt = itemEdit.getCreatedAt();
+        this.modifiedAt = LocalDateTime.now();
     }
 
 
