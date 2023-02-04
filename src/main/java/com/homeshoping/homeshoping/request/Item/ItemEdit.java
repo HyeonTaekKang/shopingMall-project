@@ -26,25 +26,36 @@ public class ItemEdit {
     private Long id;
 
     @NotBlank(message = "상품명을 입력해주세요!")
-    private String name;     // 상품명
+    private String name;     // 수정된 상품명
 
     @NotNull(message = "상품의 가격을 입력해주세요!")
-    private int price;       // 상품가격
+    private int price;       // 수정된 상품가격
 
-    private ItemInfoEdit itemInfoEdit; // 상품 정보
+    private ItemInfoEdit editedItemInfo; // 수정된 상품 정보
 
-    private List<ItemOptionEdit> itemOptionEditList = new ArrayList<>(); // 아이템 옵션
+    private List<ItemOptionEdit> editedItemOptionList = new ArrayList<>(); // 수정된 아이템 옵션
 
-    private ItemCategoryEdit itemCategoryEdit; // 상품 카테고리
+    private ItemCategoryEdit editedItemCategory; // 수정된 상품 카테고리
 
     @NotNull(message = "상품의 재고를 입력해주세요!")
-    private int stockQuantity;   // 상품재고
+    private int stockQuantity;   // 수정된 상품재고
 
-    private LocalDateTime createdAt; // 상품 등록 날짜
+    private LocalDateTime createdAt; // 수정된 상품 등록 날짜
 
-    private LocalDateTime modifiedAt; // 상품 변경일
+    private LocalDateTime modifiedAt; // 수정된 상품 변경일
 
-
+    @Builder
+    public ItemEdit(Long id, String name, int price, ItemInfoEdit editedItemInfo, List<ItemOptionEdit> editedItemOptionList, ItemCategoryEdit editedItemCategory, int stockQuantity, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.editedItemInfo = editedItemInfo;
+        this.editedItemOptionList = editedItemOptionList;
+        this.editedItemCategory = editedItemCategory;
+        this.stockQuantity = stockQuantity;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
     // DTO -> entity ( itemInfoEdit -> itemInfo )
 //    public ItemInfo toEntity(ItemInfoEdit itemInfoEdit){
 //        return ItemInfo.builder()
