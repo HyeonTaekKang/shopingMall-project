@@ -9,6 +9,7 @@ import com.homeshoping.homeshoping.request.itemInfo.ItemInfoCreate;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionEdit;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
@@ -84,18 +85,32 @@ public class Item {
         this.price = itemEdit.getPrice();
 
         // 상품 info 연관관계 맵핑
-        this.itemInfo = itemEdit.getEditedItemInfo().toEntity(itemEdit.getEditedItemInfo());
+        this.itemInfo = itemEdit.getEditedItemInfo().toEntity();
 
         // 상품 option 연관관계 맵핑
-        this.itemOptions = itemEdit.getEditedItemOptionList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity(itemOptionEdit)).collect(Collectors.toList());
+        this.itemOptions = itemEdit.getEditedItemOptionList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity()).collect(Collectors.toList());
 
         // 상품 category 연관관계 맵핑
-        this.itemCategory = itemEdit.getEditedItemCategory().toEntity(itemEdit.getEditedItemCategory());
+        this.itemCategory = itemEdit.getEditedItemCategory().toEntity();
 
         this.stockQuantity = itemEdit.getStockQuantity();
         this.createdAt = itemEdit.getCreatedAt();
         this.modifiedAt = LocalDateTime.now();
     }
+    @Builder
+    public Item(Long id, String name, int price, ItemInfo itemInfo, List<ItemOption> itemOptions, ItemCategory itemCategory, int stockQuantity, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.itemInfo = itemInfo;
+        this.itemOptions = itemOptions;
+        this.itemCategory = itemCategory;
+        this.stockQuantity = stockQuantity;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+
 
 
     // 생성자 오버로딩 ( item 추가 )
@@ -109,14 +124,14 @@ public class Item {
     }
 
     // 생성자 오버로딩 ( item 변경 )
-    public Item(ItemEdit itemEdit){
-        this.name = itemEdit.getName();
-        this.price = itemEdit.getPrice();
-        this.stockQuantity = itemEdit.getStockQuantity();
-//        this.category= itemEdit.getItemCategory();
-        this.createdAt = itemEdit.getCreatedAt();
-        this.modifiedAt = itemEdit.getModifiedAt();  // 수정날짜를 객체가 생성된 지금으로.
-    }
+//    public Item(ItemEdit itemEdit){
+//        this.name = itemEdit.getName();
+//        this.price = itemEdit.getPrice();
+//        this.stockQuantity = itemEdit.getStockQuantity();
+////        this.category= itemEdit.getItemCategory();
+//        this.createdAt = itemEdit.getCreatedAt();
+//        this.modifiedAt = itemEdit.getModifiedAt();  // 수정날짜를 객체가 생성된 지금으로.
+//    }
 
     // 연관관계 편의 메서드
     private void addItemOption(ItemOption itemOption){
