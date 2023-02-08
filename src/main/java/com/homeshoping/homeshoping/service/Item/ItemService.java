@@ -2,7 +2,12 @@ package com.homeshoping.homeshoping.service.Item;
 
 import com.homeshoping.homeshoping.Exception.ItemNotFound;
 import com.homeshoping.homeshoping.entity.Item.Item;
+import com.homeshoping.homeshoping.entity.Item.ItemFile;
+import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
+import com.homeshoping.homeshoping.repository.Item.ItemFileRepository;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
+import com.homeshoping.homeshoping.repository.ItemOption.ItemOptionRepository;
+import com.homeshoping.homeshoping.repository.itemInfo.ItemInfoRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
@@ -12,7 +17,10 @@ import com.homeshoping.homeshoping.response.category.CategoryListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,15 +31,52 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
+    private final ItemInfoRepository itemInfoRepository;
+
+    private final ItemOptionRepository itemOptionRepository;
+
+    private final ItemFileRepository itemFileRepository;
     // 상품 등록하기 ( create )
     @Transactional
-    public Long itemRegistration(ItemCreate itemCreate){
+    public Long itemRegistration(ItemCreate itemCreate) throws IOException {
+/*
+         - 첨부 파일 처리
+            1. DTO에 담긴 파일을 꺼냄
+            2. 파일의 이름을 가져옴
+            3. 서버 저장용 이름을 만듦 : 내사진.jpg => 581290_내사진.jpg
+            4. 저장 경로 설정
+            5. 해당 경로에 파일 저장
+            6. item_table 에 해당 데이터 save 처리
+            7. item_file_table 에 해당 데이터 save 처리
+         */
 
         // 상품 DTO -> 상품 Entity
         Item item = Item.createItem(itemCreate);
 
         // 상품 저장
-        itemRepository.save(item);
+        Long saveId = itemRepository.save(item).getId();
+
+//        // 상품 이미지가 포함된 item을 찾아옴.
+//        Item includeFileItem = itemRepository.findById(saveId).get();
+//
+//        for(MultipartFile itemFile : itemCreate.getItemFile()){
+////            MultipartFile itemFile = itemCreate.getItemFile(); // 1
+//
+//            String originalFilename = itemFile.getOriginalFilename(); // 2
+//
+//            String storedFileName = System.currentTimeMillis() + "_" + originalFilename; // 3
+//
+//            // 파일이 설정해둔 경로에 설정해준 이름으로 저장이 되게끔 셋팅해주는 작업.
+//            String savePath = "C:/springboot_img/" + storedFileName; // C:/springboot_img/74982760943_내사진.jpg  // 4
+//
+//            itemFile.transferTo(new File(savePath)); // 5
+//
+//
+//            // 부모 ( item )가 셋팅된 ItemFile
+//            ItemFile setItemItemFile = ItemFile.toItemFile(includeFileItem, originalFilename, storedFileName);
+//
+//            // 부모 ( item ) 가 셋팅된 ItemFile 저장.
+//            itemFileRepository.save(setItemItemFile);
         return item.getId();
     }
 
@@ -82,17 +127,27 @@ public class ItemService {
     }
 //
 //
-    // 상품 변경하기
+    // 상품 수정
     @Transactional  // (변경할 상품id , 변경된 상품)
-    public void editItem(Long itemId, ItemEdit itemEdit){
+    public Long editItem(Long itemId, ItemEdit itemEdit){
 
         // 변경할 상품을 상품id로 가져오기.
-        Item item = itemRepository.getItem(itemId);
+//        Item item = itemRepository.getItem(itemId);
+        Item item = itemRepository.findById(itemId).get();
+
+        // 변경할 상품의 상세정보를 상품의 상세정보의 id로 가져오기
+        ItemInfo itemInfo = itemInfoRepository.findById(item.getItemInfo().getId()).get();
+
+//        // 변경할 상품의 옵션을 상품의 옵션의 id로 가져오기
+//        itemOptionRepository.findById(item.getItemOptions().)
 
         // 상품 변경
         item.editItem(itemEdit);
 
+        // 상품 정보 변경
+        itemInfo.editItemInfo(itemEdit.getEditedItemInfo());
 
+        return item.getId();
     }
 //
 //    // 등록한 상품 삭제하기 ( delete )
