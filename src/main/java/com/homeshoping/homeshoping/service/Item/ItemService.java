@@ -4,9 +4,11 @@ import com.homeshoping.homeshoping.Exception.ItemNotFound;
 import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.entity.Item.ItemFile;
 import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
+import com.homeshoping.homeshoping.entity.itemOption.ItemOption;
 import com.homeshoping.homeshoping.repository.Item.ItemFileRepository;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.repository.ItemOption.ItemOptionRepository;
+import com.homeshoping.homeshoping.repository.itemCategory.ItemCategoryRepository;
 import com.homeshoping.homeshoping.repository.itemInfo.ItemInfoRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
@@ -34,6 +36,8 @@ public class ItemService {
     private final ItemInfoRepository itemInfoRepository;
 
     private final ItemOptionRepository itemOptionRepository;
+
+    private final ItemCategoryRepository itemCategoryRepository;
 
     private final ItemFileRepository itemFileRepository;
     // 상품 등록하기 ( create )
@@ -131,21 +135,31 @@ public class ItemService {
     @Transactional  // (변경할 상품id , 변경된 상품)
     public Long editItem(Long itemId, ItemEdit itemEdit){
 
-        // 변경할 상품을 상품id로 가져오기.
+        // 변경할 상품 가져오기.
 //        Item item = itemRepository.getItem(itemId);
         Item item = itemRepository.findById(itemId).get();
 
-        // 변경할 상품의 상세정보를 상품의 상세정보의 id로 가져오기
+        // 변경할 상품의 상세정보 가져오기
         ItemInfo itemInfo = itemInfoRepository.findById(item.getItemInfo().getId()).get();
 
-//        // 변경할 상품의 옵션을 상품의 옵션의 id로 가져오기
-//        itemOptionRepository.findById(item.getItemOptions().)
+        // 변경할 상품의 옵션 가져오기
+        List<ItemOption> itemOptions = itemOptionRepository.getItemOptions(item.getId());
 
+        // 변경할 상품의 카테고리 가져오기
+
+
+        // ------------------------------------------------------------------------------------
         // 상품 변경
         item.editItem(itemEdit);
 
         // 상품 정보 변경
         itemInfo.editItemInfo(itemEdit.getEditedItemInfo());
+
+        // 상품 옵션 변경
+        for(int i = 0; i<itemOptions.size(); i++) {
+            itemOptions.get(i).editItemOption(itemEdit.getEditedItemOptionList().get(i));
+//            itemOptions.set(i,itemEdit.getEditedItemOptionList().get(i));
+        }
 
         return item.getId();
     }
