@@ -2,6 +2,7 @@ package com.homeshoping.homeshoping.entity.itemOption;
 
 import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
+import com.homeshoping.homeshoping.request.itemOption.ItemOptionEdit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -79,6 +80,21 @@ public class ItemOption {
         itemOption.optionalItem10 = itemOptionCreate.getOptionalItem10();
 
         return itemOption;
+    }
+
+    // ItemOption 수정 메서드
+    public void editItemOption(ItemOptionEdit itemOptionEdit){
+        this.optionName = itemOptionEdit.getOptionName();
+        this.optionalItem1 = itemOptionEdit.getOptionalItem1();
+        this.optionalItem2 = itemOptionEdit.getOptionalItem2();
+        this.optionalItem3 = itemOptionEdit.getOptionalItem3();
+        this.optionalItem4 = itemOptionEdit.getOptionalItem4();
+        this.optionalItem5 = itemOptionEdit.getOptionalItem5();
+        this.optionalItem6 = itemOptionEdit.getOptionalItem6();
+        this.optionalItem7 = itemOptionEdit.getOptionalItem7();
+        this.optionalItem8 = itemOptionEdit.getOptionalItem8();
+        this.optionalItem9 = itemOptionEdit.getOptionalItem9();
+        this.optionalItem10 = itemOptionEdit.getOptionalItem10();
     }
 
     // 연관관계 메서드
