@@ -2,9 +2,11 @@ package com.homeshoping.homeshoping.service.itemCategory;
 
 
 import com.homeshoping.homeshoping.Exception.CategoryAlreadyExists;
+import com.homeshoping.homeshoping.Exception.parentCategoryAlreadyExists;
 import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
-import com.homeshoping.homeshoping.repository.itemCategory.ItemItemCategoryRepository;
+import com.homeshoping.homeshoping.repository.itemCategory.ItemCategoryRepository;
 import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
+import com.homeshoping.homeshoping.request.itemCategory.ParentItemCategoryCreate;
 import com.homeshoping.homeshoping.response.category.CategoryListResponse;
 import com.homeshoping.homeshoping.response.category.CategoryResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,19 +21,23 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ItemCategoryService {
 
-    private final ItemItemCategoryRepository itemCategoryRepository;
+    private final ItemCategoryRepository itemCategoryRepository;
+//
+//    // 카테고리 생성
+//    @Transactional
+//    public void createCategory(ItemCategoryCreate itemCategoryCreate){
+//        // 만약 이미 존재하는 이름의 카테고리를 생성하려고 하는 경우 에러를 리턴하는 로직이 필요함
+//
+//        // DTO -> entity
+//        ItemCategory itemCategory = itemCategoryCreate.toEntity(itemCategoryCreate);
+//
+//        itemCategoryRepository.save(itemCategory);
+//    }
 
-    // 카테고리 생성
-    @Transactional
-    public void createCategory(ItemCategoryCreate itemCategoryCreate){
-        // 만약 이미 존재하는 이름의 카테고리를 생성하려고 하는 경우 에러를 리턴하는 로직이 필요함
-
-        // DTO -> entity
-        ItemCategory itemCategory = itemCategoryCreate.toEntity(itemCategoryCreate);
-
-        itemCategoryRepository.save(itemCategory);
-    }
-
+    /**
+     * 카테고리 생성 로직
+     *  - 대분류를 먼저 생성해야 소분류를 만들 수 있음.
+     */
     // 존재하는 모든 카테고리 가져오기
     public CategoryListResponse getAllCategory(){
 
@@ -44,16 +50,16 @@ public class ItemCategoryService {
     }
 
     @Transactional
-    // 카테고리 생성 ( 대분류 , 부모  )
-    public void createBigCategory(ItemCategoryCreate itemCategoryCreate){
+    // (대분류) 카테고리 생성
+    public void createParentCategory(ParentItemCategoryCreate parentItemCategoryCreate){
 
-        // 이미 존재하는 이름의 카테고리를 생성하려고 하는 경우 에러를 리턴
-        if (itemCategoryRepository.existsByBranchAndName(itemCategoryCreate.getBranch() , itemCategoryCreate.getName())) {
-          throw new CategoryAlreadyExists();
+        // 이미 존재하는 대분류를 생성하려고 하는 경우 에러를 리턴
+        if (itemCategoryRepository.existsByBranch(parentItemCategoryCreate.getBranch())) {
+          throw new parentCategoryAlreadyExists();
        }
 
         // DTO -> entity
-        ItemCategory itemCategory = itemCategoryCreate.toEntity(itemCategoryCreate);
+        ItemCategory itemCategory = parentItemCategoryCreate.toEntity(parentItemCategoryCreate);
 
         itemCategoryRepository.save(itemCategory);
 
@@ -61,21 +67,27 @@ public class ItemCategoryService {
 
     @Transactional
      // 카테고리 생성 ( 소분류 , 자식 )
-    public void createSmallCategory(ItemCategoryCreate itemCategoryCreate){
+     // ---> *** 완전 새로운 카테고리를 생성할 떄는 대분류 만들고 , 반드시 한개 이상의
+    public void createCategory(ItemCategoryCreate itemCategoryCreate){
 
         // 부모 카테고리 이름으로 부모 카테고리 찾아오기.
         /**
          *  branch("패션")
          *  name("ROOT")
          */
-        ItemCategory parentItemCategory = itemCategoryRepository.findByBranchAndName(itemCategoryCreate.getBranch(),"ROOT")
-                .orElseThrow(() -> new IllegalArgumentException("부모 카테고리 없음 예외"));
+//        ItemCategory parentItemCategory = itemCategoryRepository.findByBranchAndName(itemCategoryCreate.getBranch(),"ROOT")
+//                .orElseThrow(() -> new IllegalArgumentException("부모 카테고리 없음 예외"));
+
+        // 이미 존재하는 이름의 카테고리를 생성하려고 하는 경우 에러를 리턴
+        if (itemCategoryRepository.existsByBranchAndName(itemCategoryCreate.getBranch() , itemCategoryCreate.getName())) {
+            throw new CategoryAlreadyExists();
+        }
 
         // DTO -> entity
         ItemCategory itemCategory = itemCategoryCreate.toEntity(itemCategoryCreate);
 
         // 자식 카테고리에 부모카테고리 셋팅
-        itemCategory.setParentItemCategory(parentItemCategory);
+//        itemCategory.setParentItemCategory(parentItemCategory);
 
         itemCategoryRepository.save(itemCategory);
     }
