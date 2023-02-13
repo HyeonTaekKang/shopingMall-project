@@ -10,6 +10,8 @@ import java.time.LocalDate;
 @Getter
 public class ItemInfoEdit {
 
+    private Long id;
+
     private String manufactureCountry; // 제조국 ( 반드시 필요! )
 
     private String material; // 소재 ( 반드시 필요! )
@@ -29,7 +31,8 @@ public class ItemInfoEdit {
     private String qualityStandard; // 품질보증기준
 
     @Builder
-    public ItemInfoEdit(String manufactureCountry, String material, String color, String size, String maker, String washingMethod, LocalDate yearAndMonthofManufacture, String manager, String qualityStandard) {
+    public ItemInfoEdit(Long id, String manufactureCountry, String material, String color, String size, String maker, String washingMethod, LocalDate yearAndMonthofManufacture, String manager, String qualityStandard) {
+        this.id = id;
         this.manufactureCountry = manufactureCountry;
         this.material = material;
         this.color = color;
@@ -41,9 +44,12 @@ public class ItemInfoEdit {
         this.qualityStandard = qualityStandard;
     }
 
+    public void editItemInfo(){
+
+    }
+
     // DTO -> entity ( itemInfoEdit -> itemInfo )
     public ItemInfo toEntity(){
-
         return ItemInfo.builder()
                 .manufactureCountry(manufactureCountry)
                 .material(material)

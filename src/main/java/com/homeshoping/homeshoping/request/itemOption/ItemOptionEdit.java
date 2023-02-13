@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public class ItemOptionEdit {
 
+    private Long id;
+
     private String optionName; // 옵션 이름
 
     private String optionalItem1; // 옵션 항목 1
@@ -30,7 +32,8 @@ public class ItemOptionEdit {
     private String optionalItem10; // 옵션 항목 10
 
     @Builder
-    public ItemOptionEdit(String optionName, String optionalItem1, String optionalItem2, String optionalItem3, String optionalItem4, String optionalItem5, String optionalItem6, String optionalItem7, String optionalItem8, String optionalItem9, String optionalItem10) {
+    public ItemOptionEdit(Long id, String optionName, String optionalItem1, String optionalItem2, String optionalItem3, String optionalItem4, String optionalItem5, String optionalItem6, String optionalItem7, String optionalItem8, String optionalItem9, String optionalItem10) {
+        this.id = id;
         this.optionName = optionName;
         this.optionalItem1 = optionalItem1;
         this.optionalItem2 = optionalItem2;
@@ -43,6 +46,7 @@ public class ItemOptionEdit {
         this.optionalItem9 = optionalItem9;
         this.optionalItem10 = optionalItem10;
     }
+
 
     public ItemOption toEntity(){
         return ItemOption.builder()

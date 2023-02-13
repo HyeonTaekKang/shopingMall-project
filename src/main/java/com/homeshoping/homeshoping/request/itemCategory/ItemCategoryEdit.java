@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public class ItemCategoryEdit {
 
+    private Long id;
+
     private String branch; // 대분류
 
     private String name; // 소분류
@@ -14,7 +16,8 @@ public class ItemCategoryEdit {
     private ItemCategoryEdit parentItemCategory;
 
     @Builder
-    public ItemCategoryEdit(String branch, String name, ItemCategoryEdit parentItemCategory) {
+    public ItemCategoryEdit(Long id, String branch, String name, ItemCategoryEdit parentItemCategory) {
+        this.id = id;
         this.branch = branch;
         this.name = name;
         this.parentItemCategory = parentItemCategory;
@@ -24,7 +27,7 @@ public class ItemCategoryEdit {
     public ItemCategory toEntity(){
         return ItemCategory.builder()
                 .branch(branch)
-                .name(getName())
+                .name(name)
                 .parentItemCategory(
                         ItemCategory.builder()
                                 .branch(parentItemCategory.getBranch())
