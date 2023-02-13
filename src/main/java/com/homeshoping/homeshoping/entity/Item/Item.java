@@ -36,19 +36,22 @@ public class Item {
     @Column(nullable = false)
     private int price;       // 상품 가격
 
-    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.PERSIST)
     @JoinColumn(name = "itemInfo_id" )
     private ItemInfo itemInfo;  // 상품상세정보
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)
     private List<ItemOption> itemOptions =  new ArrayList<>(); // 상품 옵션
 
-    @OneToOne( fetch = FetchType.LAZY ,cascade = CascadeType.ALL )
+    @OneToOne( fetch = FetchType.LAZY ,cascade = CascadeType.PERSIST )
     @JoinColumn(name = "itemCategory_id")
     private ItemCategory itemCategory; // 상품 카테고리
 
     @Column(nullable = false)
     private int stockQuantity;  // 상품 재고
+
+    @OneToMany(mappedBy = "item" , cascade = CascadeType.REMOVE , orphanRemoval = true)
+    private List<ItemFile> itemFileList = new ArrayList<>();
 
     private LocalDateTime createdAt; // 상품 등록 날짜
 
@@ -66,7 +69,10 @@ public class Item {
         item.itemInfo = ItemInfoCreate.toEntity(itemCreate.getItemInfoCreate());
 
         // 상품 option 연관관계 맵핑
-        item.itemOptions = itemCreate.getItemOptionCreateList().stream().map(itemOptionCreate -> itemOptionCreate.toEntity(itemOptionCreate)).collect(Collectors.toList());
+        List<ItemOption> itemOptionList = itemCreate.getItemOptionCreateList().stream().map(itemOptionCreate -> itemOptionCreate.toEntity(itemOptionCreate)).collect(Collectors.toList());
+        for(int i=0; i<itemOptionList.size(); i++){
+            item.addItemOption(itemOptionList.get(i));
+        }
 
         // 상품 category 연관관계 맵핑
         item.itemCategory = ItemCategoryCreate.toEntity(itemCreate.getItemCategoryCreate());
@@ -80,16 +86,25 @@ public class Item {
 
     // Item 변경 메서드 ( request 받은 Create DTO를 entity로 변환하는 메서드 )
     public void editItem(ItemEdit itemEdit){
-
+//        Item.builder()
+//                .name(itemEdit.getName())
+//                .price(itemEdit.getPrice())
+//                .itemInfo(itemEdit.getEditedItemInfo().toEntity())
+//                .itemOptions(itemEdit.getEditedItemOptionList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity()).collect(Collectors.toList()))
+//                .itemCategory(itemEdit.getEditedItemCategory().toEntity())
+//                .stockQuantity(itemEdit.getStockQuantity())
+//                .createdAt(itemEdit.getCreatedAt())
+//                .modifiedAt(LocalDateTime.now())
+//                .build();
         this.name = itemEdit.getName();
         this.price = itemEdit.getPrice();
 
-        // 상품 info 연관관계 맵핑
-        this.itemInfo = itemEdit.getEditedItemInfo().toEntity();
-
-        // 상품 option 연관관계 맵핑
-        this.itemOptions = itemEdit.getEditedItemOptionList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity()).collect(Collectors.toList());
-
+//        // 상품 info 연관관계 맵핑
+//        this.itemInfo = itemEdit.getEditedItemInfo().toEntity();
+//
+//        // 상품 option 연관관계 맵핑
+//        this.itemOptions = itemEdit.getEditedItemOptionList().stream().map(itemOptionEdit -> itemOptionEdit.toEntity()).collect(Collectors.toList());
+//
         // 상품 category 연관관계 맵핑
         this.itemCategory = itemEdit.getEditedItemCategory().toEntity();
 
