@@ -13,14 +13,14 @@ public interface ItemRepositoryCustom {
     // 등록한 상품 정보 1개 가져오기
     Item getItem(Long itemId);
 
-//    // 등록한 상품 최신순으로 20개씩 가져오기
-//    List<Item> getAllRegistratedItemWithPaging(ItemSearch itemSearch);
+    // 등록한 상품 최신순으로 20개씩 가져오기
+    List<Item> getLatestItems(ItemSearch itemSearch);
 //
-//    // 매개변수로 받아온 대분류 카테고리에 포함되어있는 상품을 모두 가져오는 메서드
-//    List<Item> getAllItemByCategoryBranch(String categoryBranch);
-//
-//    // 매개변수로 받아온 소분류 카테고리에 포함되어있는 상품을 모두 가져오는 메서드
-//    List<Item> getAllItemByCategoryName(String categoryName);
+    // 매개변수로 받아온 대분류 카테고리에 포함되어있는 상품을 모두 가져오는 메서드
+    List<Item> getAllItemByCategoryBranch(String categoryBranch);
+
+    // 매개변수로 받아온 소분류 카테고리에 포함되어있는 상품을 모두 가져오는 메서드
+    List<Item> getAllItemByCategoryName(String categoryName);
 
 //    // Album 삭제
 //    public void deleteAlbumById(Long id);
