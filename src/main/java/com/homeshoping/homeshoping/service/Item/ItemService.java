@@ -3,6 +3,7 @@ package com.homeshoping.homeshoping.service.Item;
 import com.homeshoping.homeshoping.Exception.ItemNotFound;
 import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.entity.Item.ItemFile;
+import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
 import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
 import com.homeshoping.homeshoping.entity.itemOption.ItemOption;
 import com.homeshoping.homeshoping.repository.Item.ItemFileRepository;
@@ -145,8 +146,8 @@ public class ItemService {
         // 변경할 상품의 옵션 가져오기
         List<ItemOption> itemOptions = itemOptionRepository.getItemOptions(item.getId());
 
-        // 변경할 상품의 카테고리 가져오기
-
+        // 변경할 상품 카테고리 가져오기
+        ItemCategory itemCategory = itemCategoryRepository.findById(item.getItemCategory().getId()).get();
 
         // ------------------------------------------------------------------------------------
         // 상품 변경
@@ -161,7 +162,12 @@ public class ItemService {
 //            itemOptions.set(i,itemEdit.getEditedItemOptionList().get(i));
         }
 
+        // 상품 카테고리 변경
+
+
         return item.getId();
+
+
     }
 //
 //    // 등록한 상품 삭제하기 ( delete )
