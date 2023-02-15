@@ -323,7 +323,7 @@ class ItemServiceTest {
 //    }
 
     @Test
-    @DisplayName("상품 이름 변경 테스트 ")
+    @DisplayName("상품 변경 테스트 ")
     @Rollback(value = false)
     @Transactional
     void ItemEditTest() throws IOException {
@@ -375,34 +375,25 @@ class ItemServiceTest {
         // 변경전 제품의 이름과 변경 후 제품의 이름이 같은지 검증
         assertEquals("hypeboy", item.getName());
     }
-//
-//    @Test
-//    @DisplayName("상품 삭제 테스트(앨범)")
-//    void deleteItemTest(){
-//
-//        // given
-//        // 제품 한개 등록 ( 앨범 )
-//        Album album = Album.builder()
-//                .artist("에스파")
-//                .build();
-//
-//        Item item = Item.builder()
-//                .name("savage")
-//                .price(10000)
-//                .stockQuantity(10000)
-//
-//                .album(album)
-//                .build();
-//
-//        itemRepository.save(item);
-//
-//        // when
-//        // 제품 삭제
-//        itemService.deleteItem(item.getId()); // [{},{},{}]
-//
-//        // then
-//        assertEquals(0,itemRepository.count());
-//    }
+
+    @Test
+    @DisplayName("상품 삭제 테스트")
+    /**
+     * 상품과 연관관계가 있는 itemInfo 와 itemOption 도 같이 삭제가 되야함.
+     * 대신 'itemCateogry' 상품과 연관관계가 있지만  상품이 삭제되어도 그대로 남아 있어야 함.
+     */
+    void deleteItemTest() throws IOException {
+
+        // given
+        // 제품 한개 등록
+        Long itemId = createItem();
+
+        // when
+        itemRepository.deleteById(itemId);
+
+        // then
+
+    }
 
     // 상품 등록 메서드
     private Long createItem() throws IOException {
