@@ -11,7 +11,7 @@ public class ItemCategoryCreate {
 
     private String name; // 소분류
 
-    private ItemCategoryCreate parentItemCategory;
+    private ParentItemCategoryCreate parentItemCategory;
 
     // DTO -> entity ( itemCategoryCreate -> itemCategory )
     public static ItemCategory toEntity(ItemCategoryCreate smallItemCategoryCreate){
@@ -27,7 +27,7 @@ public class ItemCategoryCreate {
     }
 
     @Builder
-    public ItemCategoryCreate(String branch, String name, ItemCategoryCreate parentItemCategory) {
+    public ItemCategoryCreate(String branch, String name, ParentItemCategoryCreate parentItemCategory) {
         this.branch = branch;
         this.name = name;
         this.parentItemCategory = parentItemCategory;
