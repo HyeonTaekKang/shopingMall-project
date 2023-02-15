@@ -36,11 +36,11 @@ public class Item {
     @Column(nullable = false)
     private int price;       // 상품 가격
 
-    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.PERSIST , orphanRemoval = true)
     @JoinColumn(name = "itemInfo_id" )
     private ItemInfo itemInfo;  // 상품상세정보
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST , orphanRemoval = true)
     private List<ItemOption> itemOptions =  new ArrayList<>(); // 상품 옵션
 
     @OneToOne( fetch = FetchType.LAZY ,cascade = CascadeType.PERSIST )
