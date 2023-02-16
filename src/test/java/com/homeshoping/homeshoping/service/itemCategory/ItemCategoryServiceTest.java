@@ -1,8 +1,9 @@
 package com.homeshoping.homeshoping.service.itemCategory;
 
 
-import com.homeshoping.homeshoping.repository.itemCategory.ItemItemCategoryRepository;
+import com.homeshoping.homeshoping.repository.itemCategory.ItemCategoryRepository;
 import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
+import com.homeshoping.homeshoping.request.itemCategory.ParentItemCategoryCreate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,85 +21,92 @@ class ItemCategoryServiceTest {
     @Autowired
     ItemCategoryService itemCategoryService;
     @Autowired
-    ItemItemCategoryRepository itemCategoryRepository;
+    ItemCategoryRepository itemCategoryRepository;
 
 
     @Test
     @Rollback(value = false)
-    @DisplayName("카테고리 저장 테스트 ( 대분류 )")
+    @DisplayName("카테고리 생성 테스트 ( 대분류 )")
     public void createBigCategoryTest(){
-        ItemCategoryCreate itemCategoryCreate = ItemCategoryCreate.builder()
-                .branch("패션")
+        ParentItemCategoryCreate parentItemCategoryCreate1 = ParentItemCategoryCreate.builder()
+                .branch("TOP")
                 .name("ROOT")
                 .build();
 
-        itemCategoryService.createBigCategory(itemCategoryCreate);
-    }
+        itemCategoryService.createParentCategory(parentItemCategoryCreate1);
 
-    @Test
-    @Rollback(value = false)
-    @DisplayName("카테고리 저장 테스트 ( 소분류 )")
-    public void createSmallCategoryTest(){
-
-        // 대분류 생성
-        ItemCategoryCreate bigItemCategoryCreate = ItemCategoryCreate.builder()
-                .branch("패션")
+        ParentItemCategoryCreate parentItemCategoryCreate2 = ParentItemCategoryCreate.builder()
+                .branch("PANTS")
                 .name("ROOT")
                 .build();
 
-        itemCategoryService.createBigCategory(bigItemCategoryCreate);
+        itemCategoryService.createParentCategory(parentItemCategoryCreate2);
 
-        // 소분류 생성
-        ItemCategoryCreate smallItemCategoryCreate = ItemCategoryCreate.builder()
-                .branch("패션")
-                .name("PANTS")
-                .build();
-
-        itemCategoryService.createSmallCategory(smallItemCategoryCreate);
-
-        // 대분류 생성
-        ItemCategoryCreate bigItemCategoryCreate1 = ItemCategoryCreate.builder()
-                .branch("컴퓨터")
-                .name("ROOT")
-                .build();
-
-        itemCategoryService.createBigCategory(bigItemCategoryCreate1);
-
-        // 소분류 생성
-        ItemCategoryCreate smallItemCategoryCreate2 = ItemCategoryCreate.builder()
-                .branch("컴퓨터")
-                .name("그래픽카드")
-                .build();
-
-        itemCategoryService.createSmallCategory(smallItemCategoryCreate2);
 
     }
 
     @Test
     @Rollback(value = false)
-    @DisplayName("같은 branch 있는 카테고리들의 이름을 리스트형태로 가져오기.")
-    public void getCategorysNameByBranchTest(){
+    @DisplayName("카테고리 생성 테스트 ( 소분류 )")
+    public void createCategoryTest(){
 
-        // 대분류 생성
-        ItemCategoryCreate bigItemCategoryCreate = ItemCategoryCreate.builder()
-                .branch("패션")
+        // 첫번쨰 (대분류) 생성
+        ParentItemCategoryCreate parentItemCategory1 = ParentItemCategoryCreate.builder()
+                .branch("TOP")
                 .name("ROOT")
                 .build();
 
-        itemCategoryService.createBigCategory(bigItemCategoryCreate);
-
-        // 소분류 생성
-        ItemCategoryCreate smallItemCategoryCreate = ItemCategoryCreate.builder()
-                .branch("패션")
-                .name("PANTS")
+        // 두번쨰 (대분류) 생성.
+        ParentItemCategoryCreate parentItemCategory2 = ParentItemCategoryCreate.builder()
+                .branch("PANTS")
+                .name("ROOT")
                 .build();
 
-        itemCategoryService.createSmallCategory(smallItemCategoryCreate);
+        // 첫번째 (소분류) 생성.
+        ItemCategoryCreate childCategory1 = ItemCategoryCreate.builder()
+                .branch("TOP")
+                .name("맨투맨")
+                .parentItemCategory(parentItemCategory1)
+                .build();
 
-        List<String> categoryList = itemCategoryService.getCategoriesNameByBranch("패션");
+        itemCategoryService.createCategory(childCategory1);
 
-        System.out.println("categoryList= " + categoryList);
+        // 두번쨰 (소분류) 생성.
+        ItemCategoryCreate childCategory2 = ItemCategoryCreate.builder()
+                .branch("PANTS")
+                .name("청바지")
+                .parentItemCategory(parentItemCategory2)
+                .build();
+
+        itemCategoryService.createCategory(childCategory2);
+
     }
+
+//    @Test
+//    @Rollback(value = false)
+//    @DisplayName("같은 branch 있는 카테고리들의 이름을 리스트형태로 가져오기.")
+//    public void getCategorysNameByBranchTest(){
+//
+//        // 대분류 생성
+//        ItemCategoryCreate bigItemCategoryCreate = ItemCategoryCreate.builder()
+//                .branch("패션")
+//                .name("ROOT")
+//                .build();
+//
+//        itemCategoryService.createBigCategory(bigItemCategoryCreate);
+//
+//        // 소분류 생성
+//        ItemCategoryCreate smallItemCategoryCreate = ItemCategoryCreate.builder()
+//                .branch("패션")
+//                .name("PANTS")
+//                .build();
+//
+//        itemCategoryService.createCategory(smallItemCategoryCreate);
+//
+//        List<String> categoryList = itemCategoryService.getCategoriesNameByBranch("패션");
+//
+//        System.out.println("categoryList= " + categoryList);
+//    }
     // 전체 카테고리 다 가져오기 테스트
 //    @Test
 //    @Rollback(value = false)
