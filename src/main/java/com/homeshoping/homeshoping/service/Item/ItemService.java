@@ -1,5 +1,6 @@
 package com.homeshoping.homeshoping.service.Item;
 
+import com.homeshoping.homeshoping.Exception.CategoryNotFound;
 import com.homeshoping.homeshoping.Exception.ItemNotFound;
 import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.entity.Item.ItemFile;
@@ -15,6 +16,8 @@ import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
 
+import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
+import com.homeshoping.homeshoping.response.Item.ItemListResponse;
 import com.homeshoping.homeshoping.response.Item.ItemResponse;
 import com.homeshoping.homeshoping.response.category.CategoryListResponse;
 import lombok.RequiredArgsConstructor;
@@ -56,10 +59,22 @@ public class ItemService {
          */
 
         // 상품 DTO -> 상품 Entity
-        Item item = Item.createItem(itemCreate);
+        Item newItem = Item.createItem(itemCreate);
 
         // 상품 저장
-        Long saveId = itemRepository.save(item).getId();
+        itemRepository.save(newItem).getId();
+
+        ItemCategory itemCategory = itemCategoryRepository.findByBranchAndName(itemCreate.getItemCategoryCreate().getBranch(), itemCreate.getItemCategoryCreate().getName())
+                .orElseThrow(() -> new CategoryNotFound());
+
+        Item item = itemRepository.findById(newItem.getId()).orElseThrow(() -> new ItemNotFound());
+
+        item.setItemCategory(itemCategory);
+
+
+//        Item item = itemRepository.findById(newItem.getId()).orElseThrow(() -> new ItemNotFound());
+//
+//        ItemCategory itemCategory = itemCategoryRepository.findByBranchAndName(item.getItemCategory().getBranch(), item.getItemCategory().getName()).orElseThrow(() -> new CategoryNotFound());
 
 //        // 상품 이미지가 포함된 item을 찾아옴.
 //        Item includeFileItem = itemRepository.findById(saveId).get();
@@ -82,7 +97,7 @@ public class ItemService {
 //
 //            // 부모 ( item ) 가 셋팅된 ItemFile 저장.
 //            itemFileRepository.save(setItemItemFile);
-        return item.getId();
+        return newItem.getId();
     }
 
     // 등록한 상품 하나만 가져오기 ( read one )
@@ -106,7 +121,7 @@ public class ItemService {
     }
 
     // ( 대분류 ) 카테고리별로 상품 가져오기
-    public CategoryListResponse findAllItemByCategoryBranch(String categoryBranch){
+    public ItemListResponse findAllItemByCategoryBranch(String categoryBranch){
 
         // 같은 categoryBranch인 Item들을 리스트에 담아옴
         List<Item> items = itemRepository.getAllItemByCategoryBranch(categoryBranch); //[{} , {}]
@@ -115,7 +130,7 @@ public class ItemService {
         // 리스트안에 있는 item 객체를 itemResponse객체로 변경한다음, 그 변경한 객체를 리스트 안에 담기.
         List<ItemResponse> itemDto = items.stream().map(item -> ItemResponse.createItemResponse(item)).collect(Collectors.toList());
 
-        return new CategoryListResponse(itemDto);
+        return new ItemListResponse(itemDto);
     }
 
     // ( 소분류 ) 카테고리별로 상품 가져오기
@@ -146,7 +161,7 @@ public class ItemService {
         // 변경할 상품의 옵션 가져오기
         List<ItemOption> itemOptions = itemOptionRepository.getItemOptions(item.getId());
 
-        // 변경할 상품 카테고리 가져오기
+        // 변경할 상품의 카테고리 가져오기
         ItemCategory itemCategory = itemCategoryRepository.findById(item.getItemCategory().getId()).get();
 
         // ------------------------------------------------------------------------------------
@@ -161,8 +176,6 @@ public class ItemService {
             itemOptions.get(i).editItemOption(itemEdit.getEditedItemOptionList().get(i));
 //            itemOptions.set(i,itemEdit.getEditedItemOptionList().get(i));
         }
-
-        // 상품 카테고리 변경
 
 
         return item.getId();
