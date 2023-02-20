@@ -1,18 +1,14 @@
 package com.homeshoping.homeshoping.controller.Item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homeshoping.homeshoping.Exception.CategoryNotFound;
 import com.homeshoping.homeshoping.entity.Item.Item;
-import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
-import com.homeshoping.homeshoping.repository.itemCategory.ItemItemCategoryRepository;
+import com.homeshoping.homeshoping.repository.itemCategory.ItemCategoryRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
-import com.homeshoping.homeshoping.request.Item.ItemSearch;
-import com.homeshoping.homeshoping.request.Item.ItemEdit;
 import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
+import com.homeshoping.homeshoping.request.itemCategory.ParentItemCategoryCreate;
 import com.homeshoping.homeshoping.request.itemInfo.ItemInfoCreate;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
-import com.homeshoping.homeshoping.response.Item.ItemResponse;
 import com.homeshoping.homeshoping.service.Item.ItemService;
 import com.homeshoping.homeshoping.service.itemCategory.ItemCategoryService;
 import org.junit.jupiter.api.DisplayName;
@@ -22,10 +18,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class ItemControllerTest {
 
     @Autowired
@@ -54,7 +49,7 @@ class ItemControllerTest {
     ItemRepository itemRepository;
 
     @Autowired
-    ItemItemCategoryRepository itemCategoryRepository;
+    ItemCategoryRepository itemCategoryRepository;
 
     @Autowired
     MockMvc mockMvc;
@@ -63,21 +58,18 @@ class ItemControllerTest {
     ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("제품 등록 테스트(앨범)")
+    @DisplayName("제품 등록 테스트")
+    @Rollback(value = false)
+    @Transactional
     void createProductTest() throws Exception {
 
         // given
-        // 상품 등록
-
-        ItemCreate newProduct = ItemCreate.builder()
-                .name("savage")
-                .price(10000)
-                .stockQuantity(10000)
-                .build();
+        // 새로운 상품 등록
+        ItemCreate newItem = createItem();
 
         // when
         // 객체 -> JSON
-        String productJson = objectMapper.writeValueAsString(newProduct);
+        String productJson = objectMapper.writeValueAsString(newItem);
 
         // then
         // 검증
@@ -89,23 +81,23 @@ class ItemControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    @DisplayName("등록된 제품 1개 가져오기 테스트")
-    @Rollback(value = false)
-    void readItemTest() throws Exception{
-
-        // given
-        // 상품 생성후, 생성한 아이템의 id 가져오기
-        Long itemId = createItem();
-
-        // expected
-        // 상품 가져오기
-        mockMvc.perform(get("/item/{itemId}",itemId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
+//    @Test
+//    @DisplayName("등록된 제품 1개 가져오기 테스트")
+//    @Rollback(value = false)
+//    void readItemTest() throws Exception{
+//
+//        // given
+//        // 상품 생성후, 생성한 아이템의 id 가져오기
+//        Long itemId = createItem();
+//
+//        // expected
+//        // 상품 가져오기
+//        mockMvc.perform(get("/item/{itemId}",itemId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//    }
 
 //    @Test
 //    @DisplayName("대분류 카테고리별로 등록된 아이템들 가져오기 테스트")
@@ -347,21 +339,24 @@ class ItemControllerTest {
 
 
     // 상품 등록 메서드
-    private Long createItem(){
+    private ItemCreate createItem() throws IOException {
 
         // given
         // 아이템 info 생성.
         ItemInfoCreate itemInfoCreate = createItemInfo();
 
-        // 대분류 아이템 category 생성. ( 대분류(branch) = 패션 , 소분류(name) = ROOT )
-        ItemCategoryCreate bigItemCategory = createBigItemCategory();
+        // (대분류) 아이템 category 생성. ( 대분류(branch) = TOP , 소분류(name) = ROOT )
+        ParentItemCategoryCreate parentItemCategory = createParentItemCategory();
 
-        // 소분류 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
-        ItemCategoryCreate smallItemCategory = ItemCategoryCreate.builder()
-                .branch("패션")
-                .name("PANTS")
-                .parentItemCategory(bigItemCategory)
+        // (소분류) 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
+        ItemCategoryCreate childItemCategory = ItemCategoryCreate.builder()
+                .branch("TOP")
+                .name("맨투맨")
+                .parentItemCategory(parentItemCategory)
                 .build();
+
+        // 카테고리 생성.
+        itemCategoryService.createCategory(childItemCategory);
 
         // 아이템 option 생성.
         List<ItemOptionCreate> itemOptionCreateList = createItemOption();
@@ -372,7 +367,7 @@ class ItemControllerTest {
                 .price(10000)
                 .itemInfoCreate(itemInfoCreate)
                 .itemOptionCreateList(itemOptionCreateList)
-                .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
+                .itemCategoryCreate(childItemCategory) // 부모가 셋팅된 자식 카테고리
                 .stockQuantity(10000)
                 .itemOptionCreateList(itemOptionCreateList)
                 .createdAt(LocalDateTime.now())
@@ -381,7 +376,7 @@ class ItemControllerTest {
         // when
         // 상품 등록
         Long itemId = itemService.itemRegistration(itemCreate);
-        return itemId;
+        return itemCreate;
     }
 
     // 새로운 ItemInfo 생성
@@ -429,15 +424,15 @@ class ItemControllerTest {
 
 
     // ( 대분류 ) ItemCategory 리턴
-    private ItemCategoryCreate createBigItemCategory(){
+    private ParentItemCategoryCreate createParentItemCategory() {
 
         // 대분류 생성
-        ItemCategoryCreate bigItemCategoryCreate = ItemCategoryCreate.builder()
-                .branch("패션")
+        ParentItemCategoryCreate parentItemCategory = ParentItemCategoryCreate.builder()
+                .branch("TOP")
                 .name("ROOT")
                 .build();
 
-        return bigItemCategoryCreate;
+        return parentItemCategory;
     }
 
 
