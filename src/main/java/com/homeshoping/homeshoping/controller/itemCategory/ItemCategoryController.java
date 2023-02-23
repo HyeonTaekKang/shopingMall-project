@@ -12,8 +12,9 @@ public class ItemCategoryController {
 
     private final ItemCategoryService itemCategoryService;
 
+    // 상품 카테고리 생성 ( 대분류 + 소분류 )
     @PostMapping("/category")
-    public void saveCategory (@RequestBody ItemCategoryCreate itemCategoryCreate) {
+    public void createItemCategory (@RequestBody ItemCategoryCreate itemCategoryCreate) {
         itemCategoryService.createCategory(itemCategoryCreate);
     }
 
