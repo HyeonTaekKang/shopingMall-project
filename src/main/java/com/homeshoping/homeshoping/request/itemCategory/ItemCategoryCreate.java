@@ -3,8 +3,10 @@ package com.homeshoping.homeshoping.request.itemCategory;
 import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ItemCategoryCreate {
 
     private String branch; // 대분류
