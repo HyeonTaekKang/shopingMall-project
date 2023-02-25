@@ -2,8 +2,10 @@ package com.homeshoping.homeshoping.entity.ItemCategory;
 
 import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +30,8 @@ public class ItemCategory {
     private List<ItemCategory> subItemCategory = new ArrayList<>();
 
     // 연관관계 편의메서드
-    public void setParentItemCategory(ItemCategory rootItemCategory) {
-        parentItemCategory = rootItemCategory;
-
+    public void setParentItemCategory(ItemCategory parentItemCategory) {
+        this.parentItemCategory = parentItemCategory;
     }
 
     public static ItemCategory createCategory(ItemCategoryCreate itemCategoryCreate){
