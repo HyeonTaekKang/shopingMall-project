@@ -4,15 +4,11 @@ import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
 import com.homeshoping.homeshoping.entity.itemOption.ItemOption;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
-import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
 import com.homeshoping.homeshoping.request.itemInfo.ItemInfoCreate;
-import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
-import com.homeshoping.homeshoping.request.itemOption.ItemOptionEdit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,10 +36,10 @@ public class Item {
     @JoinColumn(name = "itemInfo_id" )
     private ItemInfo itemInfo;  // 상품상세정보
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST , orphanRemoval = true)
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST , orphanRemoval = true)
     private List<ItemOption> itemOptions =  new ArrayList<>(); // 상품 옵션
 
-    @OneToOne( fetch = FetchType.LAZY ,cascade = CascadeType.PERSIST )
+    @OneToOne( fetch = FetchType.LAZY )
     @JoinColumn(name = "itemCategory_id")
     private ItemCategory itemCategory; // 상품 카테고리
 
@@ -51,12 +47,25 @@ public class Item {
     private int stockQuantity;  // 상품 재고
 
     @OneToMany(mappedBy = "item" , cascade = CascadeType.REMOVE , orphanRemoval = true)
-    private List<ItemFile> itemFileList = new ArrayList<>();
+    private List<ItemImg> itemImgList = new ArrayList<>();
 
     private LocalDateTime createdAt; // 상품 등록 날짜
 
     private LocalDateTime modifiedAt; // 상품 변경일
 
+    @Builder
+    public Item(Long id, String name, int price, ItemInfo itemInfo, List<ItemOption> itemOptions, ItemCategory itemCategory, int stockQuantity, List<ItemImg> itemImgList, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.itemInfo = itemInfo;
+        this.itemOptions = itemOptions;
+        this.itemCategory = itemCategory;
+        this.stockQuantity = stockQuantity;
+        this.itemImgList = itemImgList;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
 
     // Item 생성 메서드 ( request 받은 Create DTO를 entity로 변환하는 메서드 )
     public static Item createItem(ItemCreate itemCreate){
@@ -75,7 +84,7 @@ public class Item {
         }
 
         // 상품 category 연관관계 맵핑
-        item.itemCategory = ItemCategoryCreate.toEntity(itemCreate.getItemCategoryCreate());
+//        item.itemCategory = ItemCategoryCreate.toEntity(itemCreate.getItemCategoryCreate());
 
         item.stockQuantity = itemCreate.getStockQuantity();
         item.createdAt = LocalDateTime.now();
@@ -158,6 +167,10 @@ public class Item {
 
     private void setItemInfo(ItemInfo itemInfo){
         this.itemInfo = itemInfo;
+    }
+
+    public void setItemCategory(ItemCategory itemCategory){
+        this.itemCategory = itemCategory;
     }
 
     // === 비지니스 메서드 ===
