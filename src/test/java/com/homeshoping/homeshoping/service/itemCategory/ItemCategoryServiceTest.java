@@ -82,6 +82,36 @@ class ItemCategoryServiceTest {
 
     }
 
+    @Test
+    @Rollback(value = false)
+    @DisplayName("부모 카테고리에 자식카테고리를 추가 테스트")
+    public void addChildCategoryTest(){
+
+        // given
+        // 카테고리 하나 생성
+        ParentItemCategoryCreate parentItemCategory = ParentItemCategoryCreate.builder()
+                .branch("TOP")
+                .name("ROOT")
+                .build();
+
+        ItemCategoryCreate childCategory = ItemCategoryCreate.builder()
+                .branch("TOP")
+                .name("맨투맨")
+                .parentItemCategory(parentItemCategory)
+                .build();
+
+        itemCategoryService.createCategory(childCategory);
+
+        // 추가하고 싶은 새로운 소분류 생성.
+        ItemCategoryCreate newChildCategory = ItemCategoryCreate.builder()
+                .branch("TOP")
+                .name("티셔츠")
+                .parentItemCategory(parentItemCategory)
+                .build();
+
+        itemCategoryService.addChildCategory(newChildCategory);
+    }
+
 //    @Test
 //    @Rollback(value = false)
 //    @DisplayName("같은 branch 있는 카테고리들의 이름을 리스트형태로 가져오기.")
@@ -107,6 +137,7 @@ class ItemCategoryServiceTest {
 //
 //        System.out.println("categoryList= " + categoryList);
 //    }
+
     // 전체 카테고리 다 가져오기 테스트
 //    @Test
 //    @Rollback(value = false)
