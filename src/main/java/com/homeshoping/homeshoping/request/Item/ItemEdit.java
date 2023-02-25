@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
 public class ItemEdit {
 
     private Long id;
@@ -56,20 +55,21 @@ public class ItemEdit {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
-    // DTO -> entity ( itemInfoEdit -> itemInfo )
-//    public ItemInfo toEntity(ItemInfoEdit itemInfoEdit){
-//        return ItemInfo.builder()
-//                .manufactureCountry(itemInfoEdit.getManufactureCountry())
-//                .material(itemInfoEdit.getMaterial())
-//                .color(itemInfoEdit.getColor())
-//                .size(itemInfoEdit.getSize())
-//                .maker(itemInfoEdit.getMaker())
-//                .washingMethod(itemInfoEdit.getWashingMethod())
-//                .yearAndMonthofManufacture(itemInfoEdit.getYearAndMonthofManufacture())
-//                .manager(itemInfoEdit.getManager())
-//                .qualityStandard(itemInfoEdit.getQualityStandard())
-//                .build();
-//    }
+
+//     DTO -> entity ( itemInfoEdit -> itemInfo )
+    public ItemInfo toEntity(ItemInfoEdit itemInfoEdit){
+        return ItemInfo.builder()
+                .manufactureCountry(itemInfoEdit.getManufactureCountry())
+                .material(itemInfoEdit.getMaterial())
+                .color(itemInfoEdit.getColor())
+                .size(itemInfoEdit.getSize())
+                .maker(itemInfoEdit.getMaker())
+                .washingMethod(itemInfoEdit.getWashingMethod())
+                .yearAndMonthofManufacture(itemInfoEdit.getYearAndMonthofManufacture())
+                .manager(itemInfoEdit.getManager())
+                .qualityStandard(itemInfoEdit.getQualityStandard())
+                .build();
+    }
 
 //    // DTO -> entity ( itemCategoryEdit -> itemCategory )
 //    public ItemCategory toEntity(ItemCategoryEdit smallItemCategoryEdit){
