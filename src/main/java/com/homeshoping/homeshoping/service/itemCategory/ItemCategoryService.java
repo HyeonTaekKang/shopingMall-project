@@ -2,7 +2,8 @@ package com.homeshoping.homeshoping.service.itemCategory;
 
 
 import com.homeshoping.homeshoping.Exception.CategoryAlreadyExists;
-import com.homeshoping.homeshoping.Exception.parentCategoryAlreadyExists;
+import com.homeshoping.homeshoping.Exception.CategoryNotFound;
+import com.homeshoping.homeshoping.Exception.ParentCategoryAlreadyExists;
 import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
 import com.homeshoping.homeshoping.repository.itemCategory.ItemCategoryRepository;
 import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
@@ -35,27 +36,23 @@ public class ItemCategoryService {
 //    }
 
     /**
-     * 카테고리 생성 로직
-     *  - 대분류를 먼저 생성해야 소분류를 만들 수 있음.
+     *  ( 카테고리 생성 로직)
+     *
+     *  -- 아예 처음 카테고리를 만드는 경우 ( 프론트에 카테고리 만들기 버튼이 존재할꺼임 )
+     *    - 반드시 대분류와  + 소분류를 함께 입력해야 카테고리가 생성됨.
+     *    - 만약 생성하려고 하는 대분류가 이미 존재하는 것이라면, 에러를 리턴함. ( 소분류는 중복 가능하게 함. <== 수정 할 수도 있음 )
+     *
+     *
+     *  -- 이미 존재하는 대분류에 소분류를 추가하는 경우 ( 프론트에 소분류 추가 버튼이 존재할꺼임 )
+     *    - select 박스로 대분류를 선택하게 하고 , 소분류를 input에 작성해서 서버로 전송.
      */
-    // 존재하는 모든 카테고리 가져오기
-    public CategoryListResponse getAllCategory(){
-
-        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAll();
-
-        // entity -> DTO
-        List<CategoryResponse> categoryDto = itemCategoryList.stream().map(c -> new CategoryResponse(c)).collect(Collectors.toList());
-
-        return new CategoryListResponse(categoryDto);
-    }
-
     @Transactional
     // (대분류) 카테고리 생성
     public void createParentCategory(ParentItemCategoryCreate parentItemCategoryCreate){
 
         // 이미 존재하는 대분류를 생성하려고 하는 경우 에러를 리턴
         if (itemCategoryRepository.existsByBranch(parentItemCategoryCreate.getBranch())) {
-          throw new parentCategoryAlreadyExists();
+          throw new ParentCategoryAlreadyExists();
        }
 
         // DTO -> entity
@@ -67,7 +64,7 @@ public class ItemCategoryService {
 
     @Transactional
      // 카테고리 생성 ( 소분류 , 자식 )
-     // ---> *** 완전 새로운 카테고리를 생성할 떄는 대분류 만들고 , 반드시 한개 이상의
+     // ---> *** 완전 새로운 카테고리를 생성할 떄는 대분류 만들고 , 반드시 한개 이상의 소분류를 같이 만들어야함.
     public void createCategory(ItemCategoryCreate itemCategoryCreate){
 
         // 부모 카테고리 이름으로 부모 카테고리 찾아오기.
@@ -78,30 +75,72 @@ public class ItemCategoryService {
 //        ItemCategory parentItemCategory = itemCategoryRepository.findByBranchAndName(itemCategoryCreate.getBranch(),"ROOT")
 //                .orElseThrow(() -> new IllegalArgumentException("부모 카테고리 없음 예외"));
 
-        // 이미 존재하는 이름의 카테고리를 생성하려고 하는 경우 에러를 리턴
-        if (itemCategoryRepository.existsByBranchAndName(itemCategoryCreate.getBranch() , itemCategoryCreate.getName())) {
+        // 생성하려는 대분류가 이미 존재하단다면 "CategoryAlreadyExists" 에러를 리턴
+        if (itemCategoryRepository.existsByBranch(itemCategoryCreate.getParentItemCategory().getBranch())) {
             throw new CategoryAlreadyExists();
         }
+        else{
+            // DTO -> entity
+            ItemCategory itemCategory = itemCategoryCreate.toEntity(itemCategoryCreate);
 
-        // DTO -> entity
-        ItemCategory itemCategory = itemCategoryCreate.toEntity(itemCategoryCreate);
+            itemCategoryRepository.save(itemCategory);
+        }
 
-        // 자식 카테고리에 부모카테고리 셋팅
-//        itemCategory.setParentItemCategory(parentItemCategory);
-
-        itemCategoryRepository.save(itemCategory);
     }
 
-    //branch 로 검색했을 때, 같은 branch의 카테고리들의 이름을 리스트 형태로 가져오기.
-    public List<String> getCategoriesNameByBranch(String branch){
+    @Transactional
+    // 대분류에 소분류 카테고리 추가하기
+    public void addChildCategory(ItemCategoryCreate itemCategoryCreate){
 
-        // 같은 branch 있는 카테고리들을 리스트 형태로 가져오기.
-        List<ItemCategory> itemCategoryList = itemCategoryRepository.getAllCategoryByBranch(branch);
+        // 부모 카테고리와 연관관계가 셋팅이 안된 카테고리를 만들어서
+        ItemCategory category = ItemCategory.createCategory(itemCategoryCreate);
 
-        // 같은 branch 있는 카테고리들의 이름을 리스트형태로 가져오기.
-        List<String> categoryNameList = itemCategoryList.stream().map(c -> c.getName()).collect(Collectors.toList());
+        // 저장하고
+        itemCategoryRepository.save(category);
 
-        return categoryNameList;
+        // 위에서 저장한 부모 카테고리와 연관관계가 셋팅이 안된 카테고리를 가져와서
+        ItemCategory itemCategory = itemCategoryRepository.findByBranchAndName(itemCategoryCreate.getBranch(), itemCategoryCreate.getName())
+                .orElseThrow(() -> new CategoryNotFound());
+
+        // 부모 카테고리 가져오기
+        ItemCategory parentCategory = itemCategoryRepository.findByBranchAndName(itemCategory.getBranch(), "ROOT").orElseThrow(() -> new CategoryNotFound());
+
+        // 가져온 카테고리에 가져온 부모 카테고리를 셋팅해주기
+//        itemCategory.setParentItemCategory(itemCategoryCreate.getParentItemCategory().toEntity(itemCategoryCreate.getParentItemCategory()));
+
+        itemCategory.setParentItemCategory(parentCategory);
+
+
+    }
+
+
+
+    // 대분류 카테고리들의 이름을 모두 가져오기
+    public List<String> getAllParentCategory(){
+
+        // 부모 카테고리들 전부 가져오기
+        List<ItemCategory> parentCategoryList = itemCategoryRepository.getAllParentCategories();
+
+        // 부모 카테고리들의 이름만 빼서 리스트에 담기.
+        List<String> parentCategoryNameList = parentCategoryList.stream().map(p -> p.getBranch()).collect(Collectors.toList());
+
+        // 부모 카테고리들의 이름이 담긴 리스트 리턴
+        return parentCategoryNameList;
+
+    }
+
+
+    // 부모 카테고리 아래에 있는 자식 카테고리들의 이름을 모두 가져오기
+    public List<String> getChildCategory(String branch){
+
+        // 부모 카테고리 아래에 있는 자식 카테고리들을 리스트 안에 담아서 가져옴.
+        List<ItemCategory> childCategoryList = itemCategoryRepository.getAllChildCategories(branch);
+
+        // 부모 카테고리 아래에 있는 자식 카테고리들의 이름만 빼서 리스트에 담기.
+        List<String> childCategoryNameList = childCategoryList.stream().map(c -> c.getName()).collect(Collectors.toList());
+
+        // 자식 카테고리들의 이름이 담겨있는 리스트를 리턴
+        return childCategoryNameList;
         // 카테고리 entity -> 카테고리 DTO
 //      CategoryDTO categoryDTO = new CategoryDTO(category);
     }
