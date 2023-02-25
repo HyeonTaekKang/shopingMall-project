@@ -1,10 +1,6 @@
-package com.homeshoping.homeshoping.service.Item;
-
-import com.homeshoping.homeshoping.Exception.ItemNotFound;
+package com.homeshoping.homeshoping.service.item;
 
 import com.homeshoping.homeshoping.entity.Item.Item;
-import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
-import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.repository.itemCategory.ItemCategoryRepository;
 import com.homeshoping.homeshoping.repository.itemInfo.ItemInfoRepository;
@@ -19,8 +15,8 @@ import com.homeshoping.homeshoping.request.itemInfo.ItemInfoCreate;
 import com.homeshoping.homeshoping.request.itemInfo.ItemInfoEdit;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionEdit;
+import com.homeshoping.homeshoping.response.Item.ItemListResponse;
 import com.homeshoping.homeshoping.response.Item.ItemResponse;
-import com.homeshoping.homeshoping.response.category.CategoryListResponse;
 import com.homeshoping.homeshoping.service.itemCategory.ItemCategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -74,38 +70,39 @@ class ItemServiceTest {
     @Transactional
     void itemRegistrationTest() throws IOException {
 
-        // given
-        // 아이템 info 생성.
-        ItemInfoCreate itemInfoCreate = createItemInfo();
-
-        // 대분류 아이템 category 생성. ( 대분류(branch) = 패션 , 소분류(name) = ROOT )
-        ParentItemCategoryCreate parentItemCategory = createParentItemCategory();
-
-        // 소분류 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
-        ItemCategoryCreate smallItemCategory = ItemCategoryCreate.builder()
-                .branch("패션")
-                .name("PANTS")
-                .parentItemCategory(parentItemCategory)
-                .build();
-
-        // 아이템 option 생성.
-        List<ItemOptionCreate> itemOptionCreateList = createItemOption();
-
-        // 생성할 아이템 셋팅
-        ItemCreate itemCreate = ItemCreate.builder()
-                .name("와이드팬츠")
-                .price(10000)
-                .itemInfoCreate(itemInfoCreate)
-                .itemOptionCreateList(itemOptionCreateList)
-                .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
-                .stockQuantity(10000)
-                .itemOptionCreateList(itemOptionCreateList)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        // when
-        // 상품 등록
-        itemService.itemRegistration(itemCreate);
+        createItem();
+//        // given
+//        // 아이템 info 생성.
+//        ItemInfoCreate itemInfoCreate = createItemInfo();
+//
+//        // 대분류 아이템 category 생성. ( 대분류(branch) = 패션 , 소분류(name) = ROOT )
+//        ParentItemCategoryCreate parentItemCategory = createParentItemCategory();
+//
+//        // 소분류 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
+//        ItemCategoryCreate smallItemCategory = ItemCategoryCreate.builder()
+//                .branch("패션")
+//                .name("PANTS")
+//                .parentItemCategory(parentItemCategory)
+//                .build();
+//
+//        // 아이템 option 생성.
+//        List<ItemOptionCreate> itemOptionCreateList = createItemOption();
+//
+//        // 생성할 아이템 셋팅
+//        ItemCreate itemCreate = ItemCreate.builder()
+//                .name("와이드팬츠")
+//                .price(10000)
+//                .itemInfoCreate(itemInfoCreate)
+//                .itemOptionCreateList(itemOptionCreateList)
+//                .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
+//                .stockQuantity(10000)
+//                .itemOptionCreateList(itemOptionCreateList)
+//                .createdAt(LocalDateTime.now())
+//                .build();
+//
+//        // when
+//        // 상품 등록
+//        itemService.itemRegistration(itemCreate);
 
         // then
         // 상품 검증
@@ -241,86 +238,56 @@ class ItemServiceTest {
         assertEquals(20, items.size());
     }
 
-//    @Test
-//    @DisplayName("대분류 카테고리별 아이템 가져오기 테스트 ( 대분류가 OUTER인 아이템 가져오기 )")
-//    @Rollback(value = false)
-//    @Transactional
-//    void findAllItemByCategoryTest() throws IOException {
-//
-//        // given
-//
-//        // 대분류 카테고리가 "OUTER" 인 아이템 10개 생성
-//        ItemCategoryCreate bigItemCategoryNameOuter = createBigItemCategoryNameOuter();
-//        for (int i = 1; i <= 10; i++) {
-//
-//            // 아이템 info 생성.
-//            ItemInfoCreate itemInfoCreate = createItemInfo();
-//
-//            // 소분류 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
-//            ItemCategoryCreate smallItemCategory = ItemCategoryCreate.builder()
-//                    .branch("OUTER")
-//                    .name("야상")
-//                    .parentItemCategory(bigItemCategoryNameOuter)
-//                    .build();
-//
-//            // 아이템 option 생성.
-//            List<ItemOptionCreate> itemOptionCreateList = createItemOption();
-//
-//            // 생성할 아이템 셋팅
-//            ItemCreate itemCreate = ItemCreate.builder()
-//                    .name("팜비 숏 야상 자켓 (4color)")
-//                    .price(10000)
-//                    .itemInfoCreate(itemInfoCreate)
-//                    .itemOptionCreateList(itemOptionCreateList)
-//                    .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
-//                    .stockQuantity(10000)
-//                    .itemOptionCreateList(itemOptionCreateList)
-//                    .createdAt(LocalDateTime.now())
-//                    .build();
-//
-//            // 상품 등록
-//            Long itemId = itemService.itemRegistration(itemCreate);
-//        }
-//
-//        // 카테고리가 "TOP" 인 아이템 10개 생성
-//        ItemCategoryCreate bigItemCategoryNameTop = createBigItemCategoryNameTop();
-//
-//        for (int i = 1; i <= 10; i++) {
-//            // 아이템 info 생성.
-//            ItemInfoCreate itemInfoCreate = createItemInfo();
-//
-//            // 소분류 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
-//            ItemCategoryCreate smallItemCategory = ItemCategoryCreate.builder()
-//                    .branch("TOP")
-//                    .name("맨투맨")
-//                    .parentItemCategory(bigItemCategoryNameTop)
-//                    .build();
-//
-//            // 아이템 option 생성.
-//            List<ItemOptionCreate> itemOptionCreateList = createItemOption();
-//
-//            // 생성할 아이템 셋팅
-//            ItemCreate itemCreate = ItemCreate.builder()
-//                    .name("찬미 프린팅 기모 오버 후드 (3color)")
-//                    .price(10000)
-//                    .itemInfoCreate(itemInfoCreate)
-//                    .itemOptionCreateList(itemOptionCreateList)
-//                    .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
-//                    .stockQuantity(10000)
-//                    .itemOptionCreateList(itemOptionCreateList)
-//                    .createdAt(LocalDateTime.now())
-//                    .build();
-//
-//            // 상품 등록
-//            Long itemId = itemService.itemRegistration(itemCreate);
-//        }
-//
-//        // when
-//        // 대분류 카테고리가 "OUTER"인 제품만 찾아오기
-//        CategoryListResponse items = itemService.findAllItemByCategoryBranch(bigItemCategoryNameOuter.getBranch());
-//
-//        System.out.println("items = " + items.getData().toString());
-//    }
+    @Test
+    @DisplayName("대분류 카테고리별 아이템 가져오기 테스트 ( 대분류가 TOP인 아이템 가져오기 )")
+    @Rollback(value = false)
+    @Transactional
+    void findAllItemByCategoryTest() throws IOException {
+
+        // given
+
+        // 대분류 아이템 category 생성. ( 대분류(branch) = TOP , 소분류(name) = ROOT )
+        ParentItemCategoryCreate parentItemCategory = createParentItemCategory();
+
+        // 대분류 카테고리가 "TOP" 인 아이템 10개 생성
+        for (int i = 1; i <= 10; i++) {
+
+            // 아이템 info 생성.
+            ItemInfoCreate itemInfoCreate = createItemInfo();
+
+            // 소분류 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
+            ItemCategoryCreate smallItemCategory = ItemCategoryCreate.builder()
+                    .branch("TOP")
+                    .name("맨투맨")
+                    .parentItemCategory(parentItemCategory)
+                    .build();
+
+            // 아이템 option 생성.
+            List<ItemOptionCreate> itemOptionCreateList = createItemOption();
+
+            // 생성할 아이템 셋팅
+            ItemCreate itemCreate = ItemCreate.builder()
+                    .name("와이드팬츠")
+                    .price(10000)
+                    .itemInfoCreate(itemInfoCreate)
+                    .itemOptionCreateList(itemOptionCreateList)
+                    .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
+                    .stockQuantity(10000)
+                    .itemOptionCreateList(itemOptionCreateList)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+
+            // 상품 등록
+            Long itemId = itemService.itemRegistration(itemCreate);
+        }
+
+
+        // when
+        // 대분류 카테고리가 "OUTER"인 제품만 찾아오기
+        ItemListResponse items = itemService.findAllItemByCategoryBranch(parentItemCategory.getBranch());
+
+        System.out.println("items = " + items.getData().toString());
+    }
 
     @Test
     @DisplayName("상품 변경 테스트 ")
@@ -402,15 +369,21 @@ class ItemServiceTest {
         // 아이템 info 생성.
         ItemInfoCreate itemInfoCreate = createItemInfo();
 
-        // 대분류 아이템 category 생성. ( 대분류(branch) = 패션 , 소분류(name) = ROOT )
+        // (대분류) 아이템 category 생성. ( 대분류(branch) = TOP , 소분류(name) = ROOT )
         ParentItemCategoryCreate parentItemCategory = createParentItemCategory();
 
-        // 소분류 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
-        ItemCategoryCreate smallItemCategory = ItemCategoryCreate.builder()
+        // (소분류) 아이템 category 에 위에서 만든 부모 아이템 카테고리 셋팅
+        ItemCategoryCreate childItemCategory = ItemCategoryCreate.builder()
                 .branch("TOP")
-                .name("검정색 맨투맨")
+                .name("맨투맨")
                 .parentItemCategory(parentItemCategory)
                 .build();
+
+        // 카테고리 생성.
+        itemCategoryService.createCategory(childItemCategory);
+
+//        // 생성한 카테고리를 branch 와 name 으로 찾아오기
+//        ItemCategory smallItemCategory = itemCategoryRepository.findByBranchAndName(childItemCategory.getBranch(), childItemCategory.getName()).orElseThrow(() -> new CategoryNotFound());
 
         // 아이템 option 생성.
         List<ItemOptionCreate> itemOptionCreateList = createItemOption();
@@ -421,7 +394,7 @@ class ItemServiceTest {
                 .price(10000)
                 .itemInfoCreate(itemInfoCreate)
                 .itemOptionCreateList(itemOptionCreateList)
-                .itemCategoryCreate(smallItemCategory) // 부모가 셋팅된 자식 카테고리
+                .itemCategoryCreate(childItemCategory) // 부모가 셋팅된 자식 카테고리
                 .stockQuantity(10000)
                 .itemOptionCreateList(itemOptionCreateList)
                 .createdAt(LocalDateTime.now())
