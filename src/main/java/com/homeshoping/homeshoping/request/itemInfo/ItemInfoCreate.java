@@ -4,10 +4,12 @@ import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
 import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
+@NoArgsConstructor
 public class ItemInfoCreate {
 
     private String manufactureCountry; // 제조국 ( 반드시 필요! )
