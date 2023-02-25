@@ -5,8 +5,10 @@ import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.entity.itemOption.ItemOption;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ItemOptionCreate {
 
     private String optionName; // 옵션 이름
