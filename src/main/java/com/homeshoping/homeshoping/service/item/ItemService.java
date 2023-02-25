@@ -1,9 +1,8 @@
-package com.homeshoping.homeshoping.service.Item;
+package com.homeshoping.homeshoping.service.item;
 
 import com.homeshoping.homeshoping.Exception.CategoryNotFound;
 import com.homeshoping.homeshoping.Exception.ItemNotFound;
 import com.homeshoping.homeshoping.entity.Item.Item;
-import com.homeshoping.homeshoping.entity.Item.ItemFile;
 import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
 import com.homeshoping.homeshoping.entity.itemInfo.ItemInfo;
 import com.homeshoping.homeshoping.entity.itemOption.ItemOption;
@@ -16,16 +15,13 @@ import com.homeshoping.homeshoping.request.Item.ItemCreate;
 import com.homeshoping.homeshoping.request.Item.ItemSearch;
 import com.homeshoping.homeshoping.request.Item.ItemEdit;
 
-import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
 import com.homeshoping.homeshoping.response.Item.ItemListResponse;
 import com.homeshoping.homeshoping.response.Item.ItemResponse;
 import com.homeshoping.homeshoping.response.category.CategoryListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,6 +60,7 @@ public class ItemService {
         // 상품 저장
         itemRepository.save(newItem).getId();
 
+        // 상품의 카테고리를 지정해주기 위한 코드들
         ItemCategory itemCategory = itemCategoryRepository.findByBranchAndName(itemCreate.getItemCategoryCreate().getBranch(), itemCreate.getItemCategoryCreate().getName())
                 .orElseThrow(() -> new CategoryNotFound());
 
@@ -92,10 +89,10 @@ public class ItemService {
 //            itemFile.transferTo(new File(savePath)); // 5
 //
 //
-//            // 부모 ( item )가 셋팅된 ItemFile
-//            ItemFile setItemItemFile = ItemFile.toItemFile(includeFileItem, originalFilename, storedFileName);
+//            // 부모 ( item )가 셋팅된 ItemImg
+//            ItemImg setItemItemFile = ItemImg.toItemFile(includeFileItem, originalFilename, storedFileName);
 //
-//            // 부모 ( item ) 가 셋팅된 ItemFile 저장.
+//            // 부모 ( item ) 가 셋팅된 ItemImg 저장.
 //            itemFileRepository.save(setItemItemFile);
         return newItem.getId();
     }
