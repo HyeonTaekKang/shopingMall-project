@@ -1,7 +1,6 @@
-package com.homeshoping.homeshoping.controller.Item;
+package com.homeshoping.homeshoping.controller.item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homeshoping.homeshoping.entity.Item.Item;
 import com.homeshoping.homeshoping.repository.Item.ItemRepository;
 import com.homeshoping.homeshoping.repository.itemCategory.ItemCategoryRepository;
 import com.homeshoping.homeshoping.request.Item.ItemCreate;
@@ -9,7 +8,7 @@ import com.homeshoping.homeshoping.request.itemCategory.ItemCategoryCreate;
 import com.homeshoping.homeshoping.request.itemCategory.ParentItemCategoryCreate;
 import com.homeshoping.homeshoping.request.itemInfo.ItemInfoCreate;
 import com.homeshoping.homeshoping.request.itemOption.ItemOptionCreate;
-import com.homeshoping.homeshoping.service.Item.ItemService;
+import com.homeshoping.homeshoping.service.item.ItemService;
 import com.homeshoping.homeshoping.service.itemCategory.ItemCategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,7 +66,6 @@ class ItemControllerTest {
         // 새로운 상품 등록
         ItemCreate newItem = createItem();
 
-        // when
         // 객체 -> JSON
         String productJson = objectMapper.writeValueAsString(newItem);
 
