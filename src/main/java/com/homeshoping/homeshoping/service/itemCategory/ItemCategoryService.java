@@ -3,6 +3,7 @@ package com.homeshoping.homeshoping.service.itemCategory;
 
 import com.homeshoping.homeshoping.Exception.CategoryAlreadyExists;
 import com.homeshoping.homeshoping.Exception.CategoryNotFound;
+import com.homeshoping.homeshoping.Exception.ItemNotFound;
 import com.homeshoping.homeshoping.Exception.ParentCategoryAlreadyExists;
 import com.homeshoping.homeshoping.entity.ItemCategory.ItemCategory;
 import com.homeshoping.homeshoping.repository.itemCategory.ItemCategoryRepository;
@@ -115,8 +116,8 @@ public class ItemCategoryService {
 
 
 
-    // 대분류 카테고리들의 이름을 모두 가져오기
-    public List<String> getAllParentCategory(){
+    // 존재하는 대분류 카테고리들의 이름을 모두 가져오기
+    public List<String> getAllParentCategoryName(){
 
         // 부모 카테고리들 전부 가져오기
         List<ItemCategory> parentCategoryList = itemCategoryRepository.getAllParentCategories();
@@ -130,8 +131,8 @@ public class ItemCategoryService {
     }
 
 
-    // 부모 카테고리 아래에 있는 자식 카테고리들의 이름을 모두 가져오기
-    public List<String> getChildCategory(String branch){
+    // 부모 카테고리 아래에 있는 자식 카테고리들의 이름을 모두 가져오기 ( 부모가 주어지면(branch) 그 부모 밑에 있는 자식들의 이름을 가져오는 메서드임 )
+    public List<String> getChildCategoryName(String branch){
 
         // 부모 카테고리 아래에 있는 자식 카테고리들을 리스트 안에 담아서 가져옴.
         List<ItemCategory> childCategoryList = itemCategoryRepository.getAllChildCategories(branch);
@@ -141,8 +142,20 @@ public class ItemCategoryService {
 
         // 자식 카테고리들의 이름이 담겨있는 리스트를 리턴
         return childCategoryNameList;
-        // 카테고리 entity -> 카테고리 DTO
-//      CategoryDTO categoryDTO = new CategoryDTO(category);
+    }
+
+    // 대분류 카테고리 삭제
+    /**
+     * 대분류 카테고리의 id를 받아와서 , 그 id로 대분류 카테고리를 찾은다음, 그 대분류 카테고리를 삭제하는 로직.
+     * 중요!!! ==>  대분류 카테고리 삭제시 , 그 아래에 있는 소분류 카테고리도 같이 삭제된다.
+     */
+    public void deleteParentCategory(Long id){
+
+        // 대분류 카테고리의 id를 받아와서 , 그 id로 대분류 카테고리를 찾아옴.
+        ItemCategory parentCategory = itemCategoryRepository.findById(id).orElseThrow(() -> new CategoryNotFound());
+
+        itemCategoryRepository.delete(parentCategory);
+
     }
 
 }
