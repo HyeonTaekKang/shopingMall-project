@@ -179,14 +179,14 @@ public class ItemService {
 
 
     }
-//
-//    // 등록한 상품 삭제하기 ( delete )
-//    @Transactional
-//    public void deleteItem(Long id){
-//
-//        // 삭제할 게시물을 찾아와서
-//        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFound());
-//        // 삭제
-//        itemRepository.delete(item);
-//    }
+
+    // 등록한 상품 삭제하기 ( delete )
+    @Transactional
+    public void deleteItem(Long id){
+
+        // 삭제할 게시물을 찾아와서
+        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFound());
+        // 삭제
+        itemRepository.delete(item);
+    }
 }
